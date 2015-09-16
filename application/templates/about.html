@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>About</title>
 </head>
 <body>
-
+{% if option %}
+    <h1>{{option}} is OK!</h1>
+{% else %}
+    <h1>About Sept!</h1>
+{% endif %}
 </body>
 </html>

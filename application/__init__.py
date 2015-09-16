@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding=utf-8 -*-
 
-__author__ = 'Ricky'
+__author__ = 'Riky'
 
 from flask import Flask
 from main import main as main_blueprint

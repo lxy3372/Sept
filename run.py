@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding=utf-8 -*-
-__author__ = 'Ricky'
+__author__ = 'Riky'
 
 from application import app
 
