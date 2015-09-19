@@ -1,14 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>About</title>
-</head>
-<body>
+{% extends "bootstrap/base.html" %}
+{% block title %}This is an example page{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+
+{% block content %}
 {% if option %}
-    <h1>{{option}} is OK!</h1>
+<h1>{{option}} is OK!</h1>
 {% else %}
-    <h1>About Sept!</h1>
+<h1>About Sept!</h1>
 {% endif %}
-</body>
-</html>
+{% endblock %}
