@@ -6,7 +6,7 @@ __author__ = 'Riky'
 from flask import Blueprint
 
 # 定义蓝图
-api = Blueprint('api', __name__)
+main = Blueprint('main', __name__)
 
 # 引入路由
-from . import dota2_api
+from . import views

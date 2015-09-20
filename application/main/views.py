@@ -6,16 +6,18 @@ __author__ = 'Ricky'
 from flask import render_template
 from . import main
 
+
 @main.route('/')
 def index():
-    return "hello world"
+    anything = 'Dota2'
+    return render_template('index.html', option=anything)
+
 
 @main.route('/about')
-@main.route('/about/<anything>')
 def templates(anything=None):
-    return render_template('about.html', option=anything)
+    return "hello world"
 
 
 @main.errorhandler(404)
 def page_not_found(e):
-    pass
+    return render_template('404.html'), 404
