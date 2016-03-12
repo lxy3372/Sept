@@ -1,13 +1,14 @@
 #!/usr/bin/env python
-#-*- coding=utf-8 -*-
+# -*- coding=utf-8 -*-
 
-__author__ = 'Riky'
 
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from main import main as main_blueprint
 from api import api as api_blueprint
 from config import config
+
+__author__ = 'Riky'
 
 
 def create_app(config_name):
