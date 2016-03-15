@@ -10,6 +10,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     FLASKY_MAIL_SENDER = 'Flasky Admin <me@rikyliu.com>'
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    SESSION_KEY = 'users'
 
     @staticmethod
     def init_app(app):

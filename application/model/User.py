@@ -4,12 +4,12 @@
 from sqlalchemy import Column, Integer, String
 from db import BaseModel
 from db import DBSession
+from flask import sessions
 
 __author__ = 'Riky'
 
 
 class User(BaseModel):
-
     __tablename__ = 't_user'
 
     query = DBSession.query_property()
@@ -28,3 +28,17 @@ class User(BaseModel):
 
     def __repr__(self):
         return '<User %r>' % (self.nickname)
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return unicode(self.id)
+
+

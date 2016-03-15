@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
 
-__author__ = 'Riky'
 
 from flask import Blueprint
+
+__author__ = 'Riky'
 
 # 定义蓝图
 main = Blueprint('main', __name__)
