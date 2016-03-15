@@ -7,6 +7,7 @@ from flask_bootstrap import Bootstrap
 from main import main as main_blueprint
 from api import api as api_blueprint
 from config import config
+from application.model.User import User
 
 __author__ = 'Riky'
 

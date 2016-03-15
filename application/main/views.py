@@ -3,24 +3,43 @@
 
 __author__ = 'Ricky'
 
-from flask import render_template
-from . import main
+from flask import render_template, flash, redirect, jsonify
 from application.service.UserService import UserService
 from application.model.db import DBSession
-from application.service import decorate
+from application.functions.helper import login_required
+from . import main
 
 
 @main.route('/')
+@main.route('/index')
+@login_required
 def index():
-    r = UserService.login('me@rikyliu.com', '123456')
-    anything = r.email
+    anything = "asdfsdf"
     return render_template('index.html', option=anything)
 
 
 @main.route('/about')
-@decorate.login_required
 def templates(anything=None):
     return "hello world"
+
+
+@main.route('/login', methods=['GET'])
+def login_page():
+    return render_template('index.html', option='')
+
+
+@main.route('/do_login', methods=['GET'])
+def do_login():
+    errcode, errmsg, data = UserService.login('me@rikyliu.com', '123456')
+    return jsonify({'errcode': errcode, 'errmsg': errmsg, 'data': None})
+
+
+@main.route("/logout")
+@login_required
+def logout():
+    UserService.logout()
+    flash("Logged out.")
+    return redirect('/login')
 
 
 @main.errorhandler(404)
