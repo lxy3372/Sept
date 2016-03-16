@@ -3,7 +3,7 @@
 
 __author__ = 'Ricky'
 
-from flask import render_template, flash, redirect, jsonify
+from flask import render_template, flash, redirect, jsonify, request, url_for
 from application.service.UserService import UserService
 from application.model.db import DBSession
 from application.functions.helper import login_required
@@ -25,13 +25,17 @@ def templates(anything=None):
 
 @main.route('/login', methods=['GET'])
 def login_page():
-    return render_template('index.html', option='')
+    title = u'登陆'
+    return render_template('login.html', option='', title=title)
 
 
-@main.route('/do_login', methods=['GET'])
+@main.route('/do_login', methods=['POST'])
 def do_login():
-    errcode, errmsg, data = UserService.login('me@rikyliu.com', '123456')
-    return jsonify({'errcode': errcode, 'errmsg': errmsg, 'data': None})
+    email = request.form['email']
+    password = request.form['password']
+    flash('ok')
+    ret, errmsg, data = UserService.login(email, password)
+    return jsonify({'ret': ret, 'errcode': 0, 'errmsg': errmsg, 'data': url_for('main.panel')})
 
 
 @main.route("/logout")
@@ -40,6 +44,13 @@ def logout():
     UserService.logout()
     flash("Logged out.")
     return redirect('/login')
+
+
+@main.route("/admin/panel")
+@login_required
+def panel():
+    title = u'管理后台'
+    return render_template('admin/panel.html', option='', title=title)
 
 
 @main.errorhandler(404)
