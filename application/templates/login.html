@@ -1,0 +1,63 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+{% endblock %}
+{% block body_attribs %} class="" {% endblock body_attribs %}
+{% block content %}
+    <div class="container-fluid login">
+        <h1 class="center">Welcome to the system.</h1>
+
+        <form id="login_form" onsubmit="login();return false;">
+            <div class="alert alert-danger " style="display: none">
+                <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
+                <strong>警告！</strong><span class="danger-content"></span>。
+            </div>
+            <div class="alert alert-success " style="display: none;">
+                <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
+                <strong>成功！</strong><span class="success-content"></span>。
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-success form-control" name="submit">Log in</button>
+        </form>
+    </div>
+{% endblock content %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
+    <script language="javascript">
+        function login() {
+            $.ajax({
+                'url': '/do_login',
+                'dataType': 'json',
+                'data': $('#login_form').serialize(),
+                'method': 'POST',
+                'success': function (data) {
+                    if (data.ret == true) {
+                        $('.success-content').html(data.errmsg);
+                        $('.alert-success').show()
+                        window.location.href = data.data
+                        return false;
+                    } else {
+                        $('.danger-content').html(data.errmsg);
+                        $('.alert-danger').show()
+                        return false;
+                    }
+                }
+            })
+        }
+        $(function () {
+            $(".close").click(function () {
+                $(".alert").alert('close');
+            });
+        })
+    </script>
+{% endblock scripts %}
