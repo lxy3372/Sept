@@ -48,8 +48,11 @@ def get_title_by_func(func_name):
     :return: unicode str
     """
     func_title_dict = {
+        #admin
         'panel': u"控制面板",
         'login_page': u"登陆",
+
+        #main
         'index': u"首页",
     }
     title = func_title_dict[func_name]

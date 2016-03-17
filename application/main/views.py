@@ -38,7 +38,7 @@ def do_login():
     password = request.form['password']
     flash('ok')
     ret, errmsg, data = UserService.login(email, password)
-    return jsonify({'ret': ret, 'errcode': 0, 'errmsg': errmsg, 'data': url_for('main.panel')})
+    return jsonify({'ret': ret, 'errcode': 0, 'errmsg': errmsg, 'data': url_for('admin.panel')})
 
 
 @main.route("/logout")
@@ -49,12 +49,6 @@ def logout():
     return redirect('/login')
 
 
-@main.route("/admin/panel")
-@login_required
-@templated(template='admin/panel.html')
-def panel():
-    title = get_title_by_func(panel.func_name)
-    return dict(option='', title=title)
 
 
 @main.errorhandler(404)

@@ -4,7 +4,6 @@
 from sqlalchemy import Column, Integer, String
 from db import BaseModel
 from db import DBSession
-from flask import sessions
 
 __author__ = 'Riky'
 

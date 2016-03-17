@@ -3,8 +3,6 @@
 
 import os
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
@@ -20,6 +18,9 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
 
+    @staticmethod
+    def init_app(app):
+        app.config.from_pyfile('./configs/dev.py')
 
 class TestingConfig(Config):
     TESTING = True
@@ -30,8 +31,8 @@ class ProductionConfig(Config):
 
 
 config = {
-    'dev': DevelopmentConfig,#开发
-    'test': TestingConfig,#测试
-    'idc': ProductionConfig,#发布
-    'default': DevelopmentConfig #默认
+    'dev': DevelopmentConfig,  # 开发
+    'test': TestingConfig,  # 测试
+    'idc': ProductionConfig,  #发布
+    'default': DevelopmentConfig  #默认
 }
