@@ -6,16 +6,18 @@ __author__ = 'Ricky'
 from flask import render_template, flash, redirect, jsonify, request, url_for
 from application.service.UserService import UserService
 from application.model.db import DBSession
-from application.functions.helper import login_required
+from application.functions.helper import login_required, get_title_by_func, templated
 from . import main
 
 
 @main.route('/')
 @main.route('/index')
 @login_required
+@templated(template='index.html')
 def index():
+    title = get_title_by_func(index.func_name)
     anything = "asdfsdf"
-    return render_template('index.html', option=anything)
+    return render_template('index.html', option=anything, title=title)
 
 
 @main.route('/about')
@@ -24,9 +26,10 @@ def templates(anything=None):
 
 
 @main.route('/login', methods=['GET'])
+@templated(template='login.html')
 def login_page():
-    title = u'登陆'
-    return render_template('login.html', option='', title=title)
+    title = get_title_by_func(login_page.func_name)
+    return dict(option='', title=title)
 
 
 @main.route('/do_login', methods=['POST'])
@@ -48,9 +51,10 @@ def logout():
 
 @main.route("/admin/panel")
 @login_required
+@templated(template='admin/panel.html')
 def panel():
-    title = u'管理后台'
-    return render_template('admin/panel.html', option='', title=title)
+    title = get_title_by_func(panel.func_name)
+    return dict(option='', title=title)
 
 
 @main.errorhandler(404)
