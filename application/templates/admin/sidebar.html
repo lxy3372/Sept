@@ -15,10 +15,10 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="{{ url_for('admin.panel') }}">面板<span class="sr-only">(current)</span></a>
+                <li {% if title == '控制面板' %} class="active" {% endif %}><a href="{{ url_for('admin.panel') }}">面板<span class="sr-only">(current)</span></a>
                 </li>
-                <li><a href="#">用户管理</a></li>
-                <li class="dropdown">
+                <li {% if title == '用户管理' %} class="active" {% endif %}><a href="{{ url_for('admin.get_users') }}">用户管理</a></li>
+                <li {% if title == '文章管理' %} class="active" {% endif %} class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">文章管理<span class="caret"></span></a>
                     <ul class="dropdown-menu">

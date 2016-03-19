@@ -9,6 +9,7 @@ class Config:
     FLASKY_MAIL_SENDER = 'Flasky Admin <me@rikyliu.com>'
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
     SESSION_KEY = 'users'
+    PAGE_LIMIT = 20
 
     @staticmethod
     def init_app(app):
@@ -20,7 +21,7 @@ class DevelopmentConfig(Config):
 
     @staticmethod
     def init_app(app):
-        app.config.from_pyfile('./configs/dev.py')
+        app.config.from_pyfile('./configs/dev.cfg')
 
 class TestingConfig(Config):
     TESTING = True

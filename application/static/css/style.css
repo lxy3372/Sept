@@ -17,10 +17,21 @@
 }
 
 .content {
-    margin: 20px auto;
+    margin-right: 0;
+    margin-left: 0;
+    background-color: #fff;
+    padding:20px;
+    border: #ddd solid 1px;
+    border-radius: 4px 4px 0 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 .footer-center {
     height:50px;
     line-height: 50px;
+}
+
+.tab-head {
+    margin-bottom: 20px;
 }

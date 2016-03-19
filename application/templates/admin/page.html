@@ -1,0 +1,29 @@
+<nav class="">
+    <ul class="pagination " style="float:right">
+        {% if Page.has_prev %}
+            <li>
+                <a href="{{ url_for_other_page(Page.page-1) }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        {% endif %}
+        {%- for page_obj in Page.iter_pages() %}
+            {% if page_obj %}
+                {% if page_obj != Page.page %}
+                    <li><a href="{{ url_for_other_page(page_obj) }}">{{ page_obj }}</a></li>
+                {% else %}
+                    <li class="active"><a href="">{{ page_obj }}</a></li>
+                {% endif %}
+            {% else %}
+                <span class=ellipsis>…</span>
+            {% endif %}
+        {%- endfor %}
+        {% if Page.has_next %}
+            <li>
+                <a href="{{ url_for_other_page(Page.page+1) }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
