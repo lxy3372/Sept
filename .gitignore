@@ -1,4 +1,4 @@
 .idea/
 *.pyc
-dev.cfg
+*.cfg
 application/static/upload/
