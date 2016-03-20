@@ -55,7 +55,7 @@ def get_title_by_func(func_name):
         'get_users': u"用户管理",
         'update_user': u"用户管理",
 
-        #main
+        # main
         'index': u"首页",
     }
     title = func_title_dict[func_name]
@@ -91,8 +91,18 @@ class Pagination(object):
                    right_current=5, right_edge=2):
         last = 0
         for num in xrange(1, self.pages + 1):
-            if num <= left_edge or (num > self.page - left_current - 1 and num < self.page + right_current) or num > self.pages - right_edge:
+            if num <= left_edge or (
+                            num > self.page - left_current - 1 and num < self.page + right_current) or num > self.pages - right_edge:
                 if last + 1 != num:
                     yield None
                 yield num
                 last = num
+
+
+def allowed_file(filename):
+    """
+    允许上传的文件后缀
+    :param filename:
+    :return:
+    """
+    return '.' in filename and filename.rsplit('.', 1)[1] in ['png', 'jpg', 'jpeg', 'gif']

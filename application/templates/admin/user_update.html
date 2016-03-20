@@ -41,12 +41,20 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="email" class="col-sm-1 control-label">头像</label>
+                        <label for="info" class="col-sm-1 control-label">头像</label>
 
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="pic" name="pic" placeholder="头像"
-                                   value="{{ user.pic | default}}">
+                        <div class="col-sm-1" id="show-img-1">
+                            <img src="{{ user.pic |default }}" style="max-height:70px;max-width: 70px" class="img-thumbnail"/>
                         </div>
+                        <div class="col-sm-4" id="show-img-1">
+                            <input type="file" name="file" id="file" class=""
+                                   style="display:inline"/>
+
+                            <button type="button" class="btn btn-info" id="upload_1">
+                                上传
+                            </button>
+                        </div>
+                        <input type="hidden" class="form-control" id="pic" name="pic" value="{{ user.pic | default }}">
                     </div>
                     <div class="form-group">
                         <label for="new_password" class="col-sm-1 control-label">新密码</label>
@@ -78,6 +86,7 @@
 
 {% block scripts %}
     {{ super() }}
+    <script src="{{ url_for('static', filename='js/ajaxfileupload.js') }}"></script>
     <script language="javascript">
         $(function () {
             $('#update').click(function () {
@@ -101,6 +110,28 @@
             })
             $(".close").click(function () {
                 $(".alert").alert('close');
+            });
+            $('#upload_1').click(function () {
+                $.ajaxFileUpload({
+                    url: "/admin/do_upload",
+                    dataType: 'text',
+                    secureuri: false, //一般设置为false
+                    fileElementId: 'file',
+                    success: function (data) {
+                        var data = JSON.parse( data.replace(/<.*>/g, '') );
+                        if (data.ret == true) {
+                            $('.success-content').html(data.errmsg);
+                            $('.alert-success').show()
+                            $('#pic').val(data.data);
+                            $('#show-img-1').css('display', 'block').html('<img src="' + data.data+ '" class="img-thumbnail"  />').css('max-height', '100px').css("max-width", '100px');
+                            return false;
+                        } else {
+                            $('.danger-content').html(data.errmsg);
+                            $('.alert-danger').show()
+                            return false;
+                        }
+                    }
+                });
             });
         })
     </script>

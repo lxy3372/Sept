@@ -3,11 +3,14 @@
 
 __author__ = 'Riky'
 
-from application.functions.helper import get_title_by_func, login_required, templated, Pagination
+from application.functions.helper import get_title_by_func, login_required, templated, Pagination, allowed_file
 from application.service.UserService import UserService
 from application.model.User import User
 from . import admin
-from flask import jsonify, request
+from flask import jsonify, request, current_app
+from qiniu import Auth, put_file, etag, urlsafe_base64_encode
+import os
+from werkzeug.utils import secure_filename
 
 limit = 20
 
@@ -27,8 +30,9 @@ def panel():
 def get_users(page):
     title = get_title_by_func(get_users.func_name)
     list_obj, total = UserService.get_user_list(limit, page)
-    page = Pagination(page, page-1, total)
+    page = Pagination(page, page - 1, total)
     return dict(title=title, list=list_obj, Page=page)
+
 
 @admin.route("/admin/user/id/<int:id>", methods=['GET'])
 @login_required
@@ -53,10 +57,32 @@ def do_update_user():
     if request.form['new_password']:
         user_dict[User.password] = request.form['new_password']
     ret = UserService.update_user_info_by_id(user_id, user_dict)
-    print ret
     if ret == 1:
-        ret_dict = {"ret": True, "errcode":0, "errmsg":"修改成功", "data":None}
+        ret_dict = {"ret": True, "errcode": 0, "errmsg": "修改成功", "data": None}
     else:
-        ret_dict = {"ret": False, "errcode":-1, "errmsg":"修改失败", "data":None}
+        ret_dict = {"ret": False, "errcode": -1, "errmsg": "修改失败", "data": None}
 
     return jsonify(ret_dict)
+
+
+@admin.route("/admin/do_upload", methods=['POST'])
+@login_required
+def do_upload():
+    files = request.files['file']
+    if files and allowed_file(files.filename):
+        qiniu_server = Auth(current_app.config['QINIU_ACCESS_KEY'], current_app.config['QINIU_SECRET_KEY'])
+        bucket_name = current_app.config['QINIU_BUCKET']
+        key = secure_filename(files.filename)
+        token = qiniu_server.upload_token(bucket_name, key, 3600)
+        path = current_app.config['TMP_UPLOAD_DIR']
+        localfile = os.path.join(path, key)
+        files.save(localfile)
+        ret, info = put_file(token, key, localfile)
+        if info.status_code == 200:
+            src = current_app.config['CDN_DOMAIN'] +'/'+ ret['key']
+            return jsonify({"ret": True, "errcode": 0, "errmsg": u"上传成功", "data": src})
+        else:
+            return jsonify({"ret": False, "errcode": -1, "errmsg": info.error, "data": None})
+    else:
+        return jsonify({"ret": False, "errcode": -1, "errmsg": u"您没有上传任何文件", "data": None})
+

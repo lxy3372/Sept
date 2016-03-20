@@ -5,9 +5,10 @@ __author__ = 'Ricky'
 
 from flask import render_template, flash, redirect, jsonify, request, url_for
 from application.service.UserService import UserService
-from application.model.db import DBSession
 from application.functions.helper import login_required, get_title_by_func, templated
+from application.model.db import db
 from . import main
+
 
 
 @main.route('/')
@@ -58,5 +59,5 @@ def page_not_found(e):
 
 @main.teardown_app_request
 def shutdown_session(exception=None):
-    DBSession.remove()
+    pass
 
