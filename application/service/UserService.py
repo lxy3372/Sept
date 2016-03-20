@@ -2,6 +2,7 @@
 # -*- coding=utf-8 -*-
 
 from application.model.User import User
+from application.model.db import db
 from flask import current_app, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -20,6 +21,8 @@ class UserService(object):
         user = User.query.filter(User.email == email).first()
         if check_password_hash(user.password,password) is False:
             return False, u'账号或者密码错误', None
+        elif user.is_active != 1:
+            return False, u'账户被冻结', None
         else:
             UserService.start_session(user)
             return True, u'登陆成功', user
@@ -71,4 +74,6 @@ class UserService(object):
         """
         if user_dict.has_key(User.password):
             user_dict[User.password] = generate_password_hash(user_dict[User.password])
-        return User.query.filter(User.id == id).update(user_dict)
+        ret = User.query.filter(User.id == id).update(user_dict)
+        db.session.commit()
+        return ret

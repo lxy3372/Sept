@@ -1,9 +1,10 @@
 {% extends "bootstrap/base.html" %}
-{% block title %}{{ title }}{% endblock %}
 {% block head %}
+    <title>{{ config['APP_TITLE'] }}{{ title }}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-{% endblock %}
+{% endblock head %}
 {% block body_attribs %} class="" {% endblock body_attribs %}
 {% block content %}
     <div class="container-fluid login">

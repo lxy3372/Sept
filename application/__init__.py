@@ -8,14 +8,14 @@ from flask_sqlalchemy import SQLAlchemy
 from main import main as main_blueprint
 from admin import admin as admin_blueprint
 from config import config
+from application.model.db import db
 
 __author__ = 'Riky'
 
 
 def create_app(config_name):
-    app = Flask(__name__)
-    db = SQLAlchemy()
 
+    app = Flask(__name__)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 

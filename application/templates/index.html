@@ -1,22 +1,23 @@
 {% extends "bootstrap/base.html" %}
 {% block title %}This is an example page{% endblock %}
 {% block head %}
-{{ super() }}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-{% endblock%}
-{% block body_attribs%} class="index_body" {% endblock body_attribs %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+{% endblock %}
+{% block body_attribs %} class="index_body" {% endblock body_attribs %}
 {% block navbar %}
-<div class="navbar navbar-fixed-top">
-  <!-- ... -->
-</div>
+    <div class="navbar navbar-fixed-top">
+        <!-- ... -->
+    </div>
 {% endblock navbar %}
 
 {% block content %}
-<div class="index">
-{% if option %}
-<h1>{{option}} is OK!</h1>
-{% else %}
-<h1>About Sept!</h1>
-{% endif %}
-</div>
+    <div class="index">
+        {% if option %}
+            <h1>{{ option }} is OK!</h1>
+        {% else %}
+            <h1>About Sept!</h1>
+        {% endif %}
+    </div>
 {% endblock content %}

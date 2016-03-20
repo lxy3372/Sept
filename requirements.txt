@@ -4,3 +4,4 @@ flask-appconfig==0.11.0
 Flask-SQLAlchemy
 flask-login
 flask-openid
+qiniu
