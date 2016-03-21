@@ -4,17 +4,16 @@
 
 from flask import Flask, request, url_for
 from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
 from main import main as main_blueprint
 from admin import admin as admin_blueprint
 from config import config
 from application.model.db import db
+from flask.ext.markdown import Markdown
 
 __author__ = 'Riky'
 
 
 def create_app(config_name):
-
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
@@ -25,8 +24,10 @@ def create_app(config_name):
     app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
     Bootstrap(app)
+    Markdown(app)
 
     return app
+
 
 def url_for_other_page(page):
     args = request.view_args.copy()

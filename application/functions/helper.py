@@ -3,6 +3,7 @@
 
 from functools import wraps
 from flask import redirect, session, current_app, flash, url_for, request, render_template
+from math import ceil
 
 __author__ = 'Riky'
 
@@ -54,6 +55,8 @@ def get_title_by_func(func_name):
         'login_page': u"登陆",
         'get_users': u"用户管理",
         'update_user': u"用户管理",
+        'get_posts': u"文章管理",
+        'add_posts': u"文章管理",
 
         # main
         'index': u"首页",
@@ -62,7 +65,6 @@ def get_title_by_func(func_name):
     return title if title else u"标题"
 
 
-from math import ceil
 
 
 class Pagination(object):
@@ -72,12 +74,16 @@ class Pagination(object):
 
     def __init__(self, page, per_page, total_count):
         self.page = page
-        self.per_page = per_page if per_page > 1 else 1
+        print per_page
+        self.per_page = per_page
+        print per_page
         self.total_count = total_count
 
     @property
     def pages(self):
-        return int(ceil(self.total_count / float(self.per_page)))
+        #int(ceil(self.total_count / float(self.per_page)))
+        print self.per_page
+        return 1
 
     @property
     def has_prev(self):
