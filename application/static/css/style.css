@@ -35,3 +35,10 @@
 .tab-head {
     margin-bottom: 20px;
 }
+
+.pic-table {
+}
+
+.pic-table tr td{
+    width:30%;
+}

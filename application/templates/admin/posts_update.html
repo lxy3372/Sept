@@ -1,0 +1,138 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+    <div class="container">
+        <div class="content">
+            <ul class="breadcrumb">
+                <li><a href="{{ url_for('admin.get_users') }}">用户管理</a><span class="divider"></span></li>
+                <li class="active">用户列表</li>
+            </ul>
+            <div class="row sub-header" style="padding:20px;">
+                <form class="form-horizontal" id="user_update">
+                    <div class="alert alert-danger " style="display: none">
+                        <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
+                        <strong>警告！</strong><span class="danger-content"></span>。
+                    </div>
+                    <div class="alert alert-success " style="display: none;">
+                        <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
+                        <strong>成功！</strong><span class="success-content"></span>。
+                    </div>
+                    <div class="form-group">
+                        <label for="id" class="col-sm-1 control-label">ID</label>
+
+                        <div class="col-sm-5">
+                            <input type="number" class="form-control" id="id" name="id" placeholder="ID"
+                                   value="{{ user.id }}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickname" class="col-sm-1 control-label">昵称</label>
+
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="nickname" name="nickname" placeholder="昵称"
+                                   value="{{ user.nickname }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-sm-1 control-label">邮箱账号</label>
+
+                        <div class="col-sm-5">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="邮箱账号"
+                                   value="{{ user.email }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="info" class="col-sm-1 control-label">头像</label>
+
+                        <div class="col-sm-1" id="show-img-1">
+                            <img src="{{ user.pic |default }}" style="max-height:70px;max-width: 70px" class="img-thumbnail"/>
+                        </div>
+                        <div class="col-sm-4" id="show-img-1">
+                            <input type="file" name="file" id="file" class=""
+                                   style="display:inline"/>
+
+                            <button type="button" class="btn btn-info" id="upload_1">
+                                上传
+                            </button>
+                        </div>
+                        <input type="hidden" class="form-control" id="pic" name="pic" value="{{ user.pic | default }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password" class="col-sm-1 control-label">新密码</label>
+
+                        <div class="col-sm-5">
+                            <input type="password" class="form-control" id="new_password" name="new_password"
+                                   placeholder="请输入新密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password" class="col-sm-1 control-label">确认密码</label>
+
+                        <div class="col-sm-5">
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                                   placeholder="确认密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-5 col-md-offset-1">
+                            <button type="button" class="btn btn-primary" id="update">保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{ super() }}
+{% endblock content %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/ajaxfileupload.js') }}"></script>
+    <script language="javascript">
+        $(function () {
+            $('#update').click(function () {
+                $.ajax({
+                    'url': '/admin/do_user',
+                    'dataType': 'json',
+                    'data': $('#user_update').serialize(),
+                    'method': 'PUT',
+                    'success': function (data) {
+                        if (data.ret == true) {
+                            $('.success-content').html(data.errmsg);
+                            $('.alert-success').show()
+                            return false;
+                        } else {
+                            $('.danger-content').html(data.errmsg);
+                            $('.alert-danger').show()
+                            return false;
+                        }
+                    }
+                })
+            })
+            $(".close").click(function () {
+                $(".alert").alert('close');
+            });
+            $('#upload_1').click(function () {
+                $.ajaxFileUpload({
+                    url: "/admin/do_upload",
+                    dataType: 'text',
+                    secureuri: false, //一般设置为false
+                    fileElementId: 'file',
+                    success: function (data) {
+                        var data = JSON.parse( data.replace(/<.*>/g, '') );
+                        if (data.ret == true) {
+                            $('.success-content').html(data.errmsg);
+                            $('.alert-success').show()
+                            $('#pic').val(data.data);
+                            $('#show-img-1').css('display', 'block').html('<img src="' + data.data+ '" class="img-thumbnail"  />').css('max-height', '100px').css("max-width", '100px');
+                            return false;
+                        } else {
+                            $('.danger-content').html(data.errmsg);
+                            $('.alert-danger').show()
+                            return false;
+                        }
+                    }
+                });
+            });
+        })
+    </script>
+{% endblock scripts %}

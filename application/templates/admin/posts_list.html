@@ -1,0 +1,36 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+    <div class="container">
+        <div class="content">
+            <ul class="breadcrumb">
+                <li><a href="{{ url_for('admin.get_posts') }}" >文章管理</a><span class="divider"></span></li>
+                <li class="active">文章列表</li>
+            </ul>
+            <table class="table table-striped">
+                <tbody>
+                <tr>
+                    <th>ID</th>
+                    <th>昵称</th>
+                    <th>邮箱</th>
+                    <th>头像</th>
+                    <th>操作</th>
+                </tr>
+                {% for user in list %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.nickname }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.pic }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.update_user', id=user.id) }}"  class="btn btn-success">编辑</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include 'admin/page.html' %}
+    </div>
+    {{ super() }}
+{% endblock content %}
+
