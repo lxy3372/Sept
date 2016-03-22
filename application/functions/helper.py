@@ -65,8 +65,6 @@ def get_title_by_func(func_name):
     return title if title else u"标题"
 
 
-
-
 class Pagination(object):
     """
     分页模型
@@ -74,16 +72,12 @@ class Pagination(object):
 
     def __init__(self, page, per_page, total_count):
         self.page = page
-        print per_page
         self.per_page = per_page
-        print per_page
         self.total_count = total_count
 
     @property
     def pages(self):
-        #int(ceil(self.total_count / float(self.per_page)))
-        print self.per_page
-        return 1
+        return int(ceil(self.total_count / float(self.per_page)))
 
     @property
     def has_prev(self):
@@ -112,3 +106,55 @@ def allowed_file(filename):
     :return:
     """
     return '.' in filename and filename.rsplit('.', 1)[1] in ['png', 'jpg', 'jpeg', 'gif']
+
+
+def list_remove_repeat(list):
+    """
+    list去重复
+    """
+    new_list = []
+    for id in list:
+        if id not in new_list:
+            new_list.append(id)
+    return new_list
+
+
+class InvalidUsage(Exception):
+    """
+    RESTFul API 反馈错误
+    """
+    status_code = 400
+
+    def __init__(self, status_code=None, payload=None, exception=None):
+        Exception.__init__(self)
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+        if exception is not None and isinstance(exception, Exception):
+            #TODO log
+            pass
+
+    def to_dict(self):
+        rv = dict(self.payload or ())
+        return rv
+
+
+class InvalidUsagePage(Exception):
+    status_code = 400
+
+    def __init__(self, message=None, status_code=None, payload=None, data=None, exception=None):
+        Exception.__init__(self)
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+        self.data = data
+        self.message = message if message is not None else ""
+        if exception is not None and isinstance(exception, Exception):
+            #TODO log
+            pass
+
+    def to_dict(self):
+        rv = dict(self.payload or ())
+        rv['data'] = self.data
+        rv['message'] = self.message
+        return rv

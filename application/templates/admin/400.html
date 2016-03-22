@@ -1,0 +1,10 @@
+{% extends "admin/layout.html" %}}
+{% block title %}500 - Error{% endblock title %}
+{% block content %}
+<div class="header text-center">
+    <h1>服务器出错啦!</h1>
+    <div class="container">
+        <code>{{ err_info }}</code>
+    </div>
+</div>
+{% endblock content %}

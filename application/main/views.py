@@ -5,10 +5,9 @@ __author__ = 'Ricky'
 
 from flask import render_template, flash, redirect, jsonify, request, url_for
 from application.service.UserService import UserService
-from application.functions.helper import login_required, get_title_by_func, templated
-from application.model.db import db
+from application.functions.error import make_ret
+from application.functions.helper import login_required, get_title_by_func, templated, InvalidUsagePage, InvalidUsage
 from . import main
-
 
 
 @main.route('/')
@@ -37,9 +36,8 @@ def login_page():
 def do_login():
     email = request.form['email']
     password = request.form['password']
-    flash('ok')
-    ret, errmsg, data = UserService.login(email, password)
-    return jsonify({'ret': ret, 'errcode': 0, 'errmsg': errmsg, 'data': url_for('admin.panel')})
+    ret = UserService.login(email, password)
+    return jsonify(make_ret(msg=u'登陆成功', data=url_for('admin.panel')))
 
 
 @main.route("/logout")
@@ -50,14 +48,21 @@ def logout():
     return redirect('/login')
 
 
+@main.errorhandler(InvalidUsagePage)
+def page_error(err):
+    error_dict = err.to_dict()
+    return render_template('400.html', error_info=error_dict), 400
 
 
-@main.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
+@main.errorhandler(InvalidUsage)
+def handle_invalid_api(error):
+    """
+    API 异常处理句柄
+    """
+    response = jsonify(error.to_dict())
+    return response
 
 
 @main.teardown_app_request
 def shutdown_session(exception=None):
     pass
-
