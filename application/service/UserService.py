@@ -3,6 +3,8 @@
 
 from application.model.User import User
 from application.model.db import db
+from application.functions.helper import InvalidUsage
+from application.functions.error import ErrorCode
 from flask import current_app, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -16,16 +18,16 @@ class UserService(object):
         登陆判断
         :param email: str
         :param password: str
-        :return: (errcode, errmsg, data)
+        :return: boolean
         """
         user = User.query.filter(User.email == email).first()
         if check_password_hash(user.password,password) is False:
-            return False, u'账号或者密码错误', None
+            raise InvalidUsage(payload=ErrorCode.get_err_dict(ErrorCode.login_user_pwd_error))
         elif user.is_active != 1:
-            return False, u'账户被冻结', None
+            return InvalidUsage(payload=ErrorCode.get_err_dict(ErrorCode.login_user_forzen_error))
         else:
             UserService.start_session(user)
-            return True, u'登陆成功', user
+            return True
 
     @staticmethod
     def add_user(nickname=None, email=None, pic=None, password=None):
