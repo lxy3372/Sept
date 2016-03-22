@@ -19,7 +19,7 @@ class Post(db.Model):
     post_title = Column(db.String(100))
     post_content = Column(db.Text)
     post_type = Column(db.Integer)
-    user_id = Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = Column(db.Integer)
     post_tag_id_str = Column(db.String(100))
     post_pic_id_str = Column(db.String(100))
     create_time = Column(db.DateTime)
@@ -41,7 +41,7 @@ class Post(db.Model):
         self.update_time = datetime.utcnow()
 
     def __repr__(self):
-        return '<Pic %r>' % (self.post_title)
+        return '<Post %r>' % (self.post_title)
 
     def get_id(self):
         return unicode(self.pic_id)
@@ -102,5 +102,3 @@ class Pic(db.Model):
 
     def get_id(self):
         return unicode(self.pic_id)
-
-user = db.relationship('Post', backref='user', lazy='dynamic', uselist=False)

@@ -95,8 +95,13 @@ def do_upload():
 def get_posts(page):
     limit = current_app.config['PAGE_LIMIT']
     title = get_title_by_func(get_posts.func_name)
+    param = request.args
+    post_type = int(param.get('post_type')) if len(param.get('post_type', '')) > 0 else None
+    is_active = int(param.get('is_active')) if len(param.get('is_active', '')) > 0 else None
+    post_title = param.get('title') if param.get('title', None) else None
+    print title
     try:
-        list_obj, total = UserService.get_user_list(limit, page)
+        list_obj, total = PostService.get_posts_list(limit, page, post_type=post_type, is_active=is_active, title=post_title)
     except Exception as e:
         raise InvalidUsagePage(message=e.message, exception=e)
 
@@ -138,10 +143,25 @@ def do_add_posts():
         raise InvalidUsage(ErrorCode.get_err_dict(ErrorCode.param_error))
 
     try:
-        PostService.addPost(post_dict)
+        PostService.add_post(post_dict)
     except Exception as e:
-        raise InvalidUsage(payload=ErrorCode.get_err_dict(ErrorCode.add_error))
+        raise InvalidUsage(payload=ErrorCode.get_err_dict(ErrorCode.add_error), exception=e)
     return jsonify(make_ret(u'添加成功'))
+
+@admin.route("/admin/tags", methods=['GET'], defaults={'page': 1})
+@admin.route("/admin/tags/page/<int:page>", methods=['GET'])
+@login_required
+@templated(template='admin/tag_list.html')
+def get_tags(page):
+    limit = current_app.config['PAGE_LIMIT']
+    title = get_title_by_func(get_tags.func_name)
+    try:
+        list_obj, total = PostService.get_tags_list(limit, page)
+    except Exception as e:
+        raise InvalidUsagePage(message=e.message, exception=e)
+
+    page = Pagination(page, limit, total)
+    return dict(title=title, list=list_obj, Page=page)
 
 
 @admin.errorhandler(InvalidUsagePage)
