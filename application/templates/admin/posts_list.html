@@ -3,26 +3,58 @@
     <div class="container">
         <div class="content">
             <ul class="breadcrumb">
-                <li><a href="{{ url_for('admin.get_posts') }}" >文章管理</a><span class="divider"></span></li>
+                <li><a href="{{ url_for('admin.get_posts') }}">文章管理</a><span class="divider"></span></li>
                 <li class="active">文章列表</li>
             </ul>
-            <table class="table table-striped">
+            <div class="row sub-header" style="padding-bottom:20px;">
+                <div class="col-md-12">
+                    <form class="form-inline" action="{{ url_for('admin.get_posts') }}" method="get">
+                        <div class="form-group">
+                            <label for="name">标题</label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="请输入文章标题关键字" value="{{ request.args.get('title', '') }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">类型</label>
+                            <select name="post_type" id="post_type" class="form-control">
+                                <option value="">全部</option>
+                                <option value="1">文章</option>
+                                <option value="2">图片</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">状态</label>
+                            <select name="is_active" id="is_active" class="form-control">
+                                <option value="">全部</option>
+                                <option value="1">发布</option>
+                                <option value="0">未发布</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-default" id="search">搜索</button>
+                    </form>
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
                 <tbody>
                 <tr>
                     <th>ID</th>
-                    <th>昵称</th>
-                    <th>邮箱</th>
-                    <th>头像</th>
+                    <th>标题</th>
+                    <th>类型</th>
+                    <th>是否发布</th>
+                    <th>创建时间</th>
+                    <th>作者</th>
                     <th>操作</th>
                 </tr>
-                {% for user in list %}
+                {% for post in list %}
                     <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.nickname }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.pic }}</td>
+                        <td>{{ post[0].post_id }}</td>
+                        <td>{{ post[0].post_title }}</td>
+                        <td>{{ post[0].post_type|post_type }}</td>
+                        <td>{{ "发布" if post[0].is_active == 1 else "未发布"}}</td>
+                        <td>{{ post[0].create_time }}</td>
+                        <td>{{ post[1].nickname }}</td>
                         <td>
-                            <a href="{{ url_for('admin.update_user', id=user.id) }}"  class="btn btn-success">编辑</a>
+                            <a href="{{ url_for('admin.get_users') }}" class="btn btn-success">编辑</a>
+                            <a href="{{ url_for('admin.get_users') }}" class="btn btn-info">预览</a>
                         </td>
                     </tr>
                 {% endfor %}

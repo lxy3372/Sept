@@ -3,16 +3,23 @@
 
 from application.model.db import db
 from application.model.Post import Post, Tag, TagPost, Pic
+from application.model.User import User
 from flask import session
 from application.functions.helper import list_remove_repeat
-import itertools
+from sqlalchemy import func
 
 __author__ = 'Riky'
 
 
 class PostService(object):
+
     @staticmethod
-    def addPost(post_dict):
+    def add_post(post_dict):
+        """
+        添加文章
+        :param post_dict: {post_title,post_content,post_seo,pic_list,is_active,tags,pic_list[]}
+        :return: post model
+        """
 
         if post_dict['tags'] is not None:
             tag_list = post_dict['tags'].split(',')
@@ -62,3 +69,37 @@ class PostService(object):
 
         return post
 
+
+    @staticmethod
+    def get_posts_list(limit, page, post_type=None, user_id=None, is_active=None, title=None):
+        """
+        分页查询
+        :param limit:
+        :param page:
+        :param post_type: 查找类型
+        :param user_id: 用户id
+        :return:  list[User]
+        """
+        offset = limit * (page - 1)
+        query = db.session.query(Post, User).filter(Post.user_id == User.id);
+        if post_type is not None:
+            query = query.filter(Post.post_type == post_type)
+        if user_id is not None:
+            query = query.filter(Post.user_id == user_id)
+        if is_active is not None:
+            query = query.filter(Post.is_active == is_active)
+        if title is not None:
+            query = query.filter(Post.post_title.like("%%%s%%" % title))
+        posts_list = query.limit(limit).offset(offset).all()
+        total = query.count()
+        print posts_list
+        return posts_list, total
+
+    @staticmethod
+    def get_tags_list(limit, page):
+        offset = limit * (page - 1)
+        sub = db.session.query(TagPost.tag_id, func.count('1').label('total')).group_by(TagPost.tag_id).subquery()
+        tags_list = db.session.query(Tag, sub.c.total).outerjoin((sub, Tag.tag_id == sub.c.tag_id)).order_by(Tag.tag_id).limit(limit).offset(offset).all()
+        print tags_list
+        total = Tag.query.count()
+        return tags_list, total

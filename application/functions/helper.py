@@ -57,6 +57,7 @@ def get_title_by_func(func_name):
         'update_user': u"用户管理",
         'get_posts': u"文章管理",
         'add_posts': u"文章管理",
+        'get_tags': u"文章管理",
 
         # main
         'index': u"首页",

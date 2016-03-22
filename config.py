@@ -8,7 +8,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
     SESSION_KEY = 'users'
-    PAGE_LIMIT = 20
+    PAGE_LIMIT = 10
 
     @staticmethod
     def init_app(app):
