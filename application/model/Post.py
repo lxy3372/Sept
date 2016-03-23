@@ -46,6 +46,9 @@ class Post(db.Model):
     def get_id(self):
         return unicode(self.pic_id)
 
+    def to_dict(self):
+        return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
+
 class Tag(db.Model):
     """
     tag model
@@ -66,6 +69,8 @@ class Tag(db.Model):
     def get_id(self):
         return unicode(self.tag_id)
 
+    def to_dict(self):
+        return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
 
 
 class TagPost(db.Model):
@@ -102,3 +107,6 @@ class Pic(db.Model):
 
     def get_id(self):
         return unicode(self.pic_id)
+
+    def to_dict(self):
+        return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}

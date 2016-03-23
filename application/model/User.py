@@ -32,4 +32,6 @@ class User(db.Model):
     def get_id(self):
         return unicode(self.id)
 
+    def to_dict(self):
+        return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
 

@@ -4,6 +4,7 @@
 from functools import wraps
 from flask import redirect, session, current_app, flash, url_for, request, render_template
 from math import ceil
+from application.model.db import db
 
 __author__ = 'Riky'
 
@@ -57,6 +58,7 @@ def get_title_by_func(func_name):
         'update_user': u"用户管理",
         'get_posts': u"文章管理",
         'add_posts': u"文章管理",
+        'get_posts_by_id': u"文章管理",
         'get_tags': u"文章管理",
 
         # main
@@ -120,6 +122,20 @@ def list_remove_repeat(list):
     return new_list
 
 
+def model_to_dict(data):
+    if isinstance(data, db.Model):
+        return data.to_dict()
+    elif isinstance(data, list) or isinstance(data, tuple):
+        new_list = []
+        for sub_data in data:
+            ret = model_to_dict(sub_data)
+            new_list.append(ret)
+        return new_list
+    else:
+        return data
+
+
+
 class InvalidUsage(Exception):
     """
     RESTFul API 反馈错误
@@ -132,7 +148,7 @@ class InvalidUsage(Exception):
             self.status_code = status_code
         self.payload = payload
         if exception is not None and isinstance(exception, Exception):
-            #TODO log
+            # TODO log
             pass
 
     def to_dict(self):
@@ -151,7 +167,7 @@ class InvalidUsagePage(Exception):
         self.data = data
         self.message = message if message is not None else ""
         if exception is not None and isinstance(exception, Exception):
-            #TODO log
+            # TODO log
             pass
 
     def to_dict(self):
