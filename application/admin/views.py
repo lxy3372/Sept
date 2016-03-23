@@ -101,7 +101,8 @@ def get_posts(page):
     post_title = param.get('title') if param.get('title', None) else None
     print title
     try:
-        list_obj, total = PostService.get_posts_list(limit, page, post_type=post_type, is_active=is_active, title=post_title)
+        list_obj, total = PostService.get_posts_list(limit, page, post_type=post_type, is_active=is_active,
+                                                     title=post_title)
     except Exception as e:
         raise InvalidUsagePage(message=e.message, exception=e)
 
@@ -120,10 +121,10 @@ def add_posts():
 @admin.route("/admin/posts/id/<int:id>", methods=['GET'])
 @login_required
 @templated(template='admin/posts_update.html')
-def update_posts(id):
-    title = get_title_by_func(get_users.func_name)
-    user = UserService.get_user_by_id(id)
-    return dict(title=title, user=user)
+def get_posts_by_id(id):
+    title = get_title_by_func(get_posts_by_id.func_name)
+    posts = PostService.get_post_by_id(id)
+    return dict(title=title, data=posts)
 
 
 @admin.route("/admin/posts/add", methods=['POST'])
@@ -147,6 +148,7 @@ def do_add_posts():
     except Exception as e:
         raise InvalidUsage(payload=ErrorCode.get_err_dict(ErrorCode.add_error), exception=e)
     return jsonify(make_ret(u'添加成功'))
+
 
 @admin.route("/admin/tags", methods=['GET'], defaults={'page': 1})
 @admin.route("/admin/tags/page/<int:page>", methods=['GET'])

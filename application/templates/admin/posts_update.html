@@ -3,11 +3,11 @@
     <div class="container">
         <div class="content">
             <ul class="breadcrumb">
-                <li><a href="{{ url_for('admin.get_users') }}">用户管理</a><span class="divider"></span></li>
-                <li class="active">用户列表</li>
+                <li><a href="{{ url_for('admin.get_posts') }}">文章管理</a><span class="divider"></span></li>
+                <li class="active">修改文章</li>
             </ul>
             <div class="row sub-header" style="padding:20px;">
-                <form class="form-horizontal" id="user_update">
+                <form class="form-horizontal" id="post_add">
                     <div class="alert alert-danger " style="display: none">
                         <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
                         <strong>警告！</strong><span class="danger-content"></span>。
@@ -17,64 +17,80 @@
                         <strong>成功！</strong><span class="success-content"></span>。
                     </div>
                     <div class="form-group">
-                        <label for="id" class="col-sm-1 control-label">ID</label>
+                        <label for="post_title" class="col-sm-1 control-label">标题</label>
 
                         <div class="col-sm-5">
-                            <input type="number" class="form-control" id="id" name="id" placeholder="ID"
-                                   value="{{ user.id }}" readonly="readonly">
+                            <input type="text" class="form-control" id="post_title" name="post_title" placeholder="随便说一句吧~~"
+                                   value="{{ data['posts'].post_title }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="nickname" class="col-sm-1 control-label">昵称</label>
+                        <label for="nickname" class="col-sm-1 control-label">SEO标题</label>
 
                         <div class="col-sm-5">
-                            <input type="text" class="form-control" id="nickname" name="nickname" placeholder="昵称"
-                                   value="{{ user.nickname }}">
+                            <input type="text" class="form-control" id="post_seo" name="post_seo" placeholder="SEO优化"
+                                   value="{{ data['posts'].post_seo }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="email" class="col-sm-1 control-label">邮箱账号</label>
+                        <label for="post_type" class="col-sm-1 control-label">类型</label>
 
-                        <div class="col-sm-5">
-                            <input type="email" class="form-control" id="email" name="email" placeholder="邮箱账号"
-                                   value="{{ user.email }}">
+                        <div class="radio col-sm-5">
+                            <label>
+                                <input type="radio" value="1" id="type1" name="post_type" {{ "checked='checked'" if data['posts'].post_type ==1 else "" }} />文章
+                            </label>
+                            <label>
+                                <input type="radio" value="2" id="type2" name="post_type" {{ "checked='checked'" if data['posts'].post_type ==2 else "" }}  />美图
+                            </label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="info" class="col-sm-1 control-label">头像</label>
-
-                        <div class="col-sm-1" id="show-img-1">
-                            <img src="{{ user.pic |default }}" style="max-height:70px;max-width: 70px" class="img-thumbnail"/>
+                        <label for="nickname" class="col-sm-1 control-label">是否发布</label>
+                        <div class="checkbox col-sm-5">
+                            <label for="is_active">
+                            <input type="checkbox" value="1" id="is_active" name="is_active" {{ "checked='checked'" if data['posts'].is_active==1 else "" }}   >是否发布
+                            </label>
                         </div>
-                        <div class="col-sm-4" id="show-img-1">
-                            <input type="file" name="file" id="file" class=""
-                                   style="display:inline"/>
-
-                            <button type="button" class="btn btn-info" id="upload_1">
-                                上传
-                            </button>
-                        </div>
-                        <input type="hidden" class="form-control" id="pic" name="pic" value="{{ user.pic | default }}">
                     </div>
-                    <div class="form-group">
-                        <label for="new_password" class="col-sm-1 control-label">新密码</label>
-
-                        <div class="col-sm-5">
-                            <input type="password" class="form-control" id="new_password" name="new_password"
-                                   placeholder="请输入新密码">
+                    <div class="form-group hide">
+                        <label for="nickname" class="col-sm-1 control-label">内容</label>
+                        <div class="checkbox col-sm-5">
+                            <textarea name="post_content" id="post_content" placeholder="请输入内容" cols="30" rows="10">{{ data['posts'].post_content }}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="confirm_password" class="col-sm-1 control-label">确认密码</label>
+                        <label for="info" class="col-sm-1 control-label">图片</label>
 
+                        <div class="col-sm-6" id="show-img-1">
+                            <table class="table table-bordered pic-table">
+                                <tr>
+                                    <td id="pic1">
+                                        <button type="button" class="btn btn-primary upload-btn">上传</button>
+                                        <input type="file" name="file" id="file1" class="file" style="display: none">
+                                    </td>
+                                    <td id="pic2">
+                                        <button type="button" class="btn btn-primary upload-btn">上传</button>
+                                        <input type="file" name="file" id="file1" class="file" style="display: none">
+                                    </td>
+                                    <td id="pic3">
+                                        <button type="button" class="btn btn-primary upload-btn">上传</button>
+                                        <input type="file" name="file" id="file1" class="file" style="display: none">
+                                    </td>
+                                </tr>
+                            </table>
+                            <input type="hidden" id="file_id" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tags" class="col-sm-1 control-label">标签</label>
                         <div class="col-sm-5">
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
-                                   placeholder="确认密码">
+                            <input type="text" class="form-control" id="tags" name="tags"
+                                   placeholder="请输入个性标签并回车" data-toggle="tags" value="{{ data['tag_obj_list'][0].tag_name }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-5 col-md-offset-1">
-                            <button type="button" class="btn btn-primary" id="update">保存</button>
+                            <button type="button" class="btn btn-primary" id="add">修改</button>
                         </div>
                     </div>
                 </form>
@@ -87,14 +103,58 @@
 {% block scripts %}
     {{ super() }}
     <script src="{{ url_for('static', filename='js/ajaxfileupload.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.tags.min.js') }}"></script>
     <script language="javascript">
         $(function () {
-            $('#update').click(function () {
+            $(".close").click(function () {
+                $(".alert").alert('close');
+            });
+            function upload() {
+                $.ajaxFileUpload({
+                    url: "/admin/do_upload",
+                    dataType: 'text',
+                    secureuri: false, //一般设置为false
+                    fileElementId: $('#file_id').val(),
+                    success: function (data) {
+                        var data = JSON.parse(data.replace(/<.*>/g, ''));
+                        if (data.ret == true) {
+                            $('.success-content').html(data.errmsg);
+                            $('.alert-success').show()
+                            pic_id = $('#file_id').val()
+                            $('#' + pic_id).parent().html("<img src='" + data.data + "' class='img-thumbnail' style='max-width:200px; max-height:200px;' /><input type='hidden' name='pic_str' value='"+data.data+"' />")
+                        } else {
+                            $('.danger-content').html(data.errmsg);
+                            $('.alert-danger').show()
+                        }
+                        setTimeout(function () {
+                            $('.close').click()
+                        }, 3000)
+                        return false;
+                    }
+                });
+            }
+
+            $('.upload-btn').click(function () {
+                var upload_id = $(this).siblings('.file').attr('id')
+                $('#file_id').val(upload_id)
+                $(this).siblings('.file').click()
+            })
+            $('.file').change(function () {
+                if ($(this).val() != '') {
+                    var reader = new FileReader()
+                    var file = this.files[0]
+                    reader.readAsDataURL(file)
+                    reader.onload = function (e) {
+                        upload()
+                    }
+                }
+            })
+            $('#add').click(function(){
                 $.ajax({
-                    'url': '/admin/do_user',
+                    'url': '/admin/posts/add',
                     'dataType': 'json',
-                    'data': $('#user_update').serialize(),
-                    'method': 'PUT',
+                    'data': $('#post_add').serialize(),
+                    'method': 'POST',
                     'success': function (data) {
                         if (data.ret == true) {
                             $('.success-content').html(data.errmsg);
@@ -108,31 +168,7 @@
                     }
                 })
             })
-            $(".close").click(function () {
-                $(".alert").alert('close');
-            });
-            $('#upload_1').click(function () {
-                $.ajaxFileUpload({
-                    url: "/admin/do_upload",
-                    dataType: 'text',
-                    secureuri: false, //一般设置为false
-                    fileElementId: 'file',
-                    success: function (data) {
-                        var data = JSON.parse( data.replace(/<.*>/g, '') );
-                        if (data.ret == true) {
-                            $('.success-content').html(data.errmsg);
-                            $('.alert-success').show()
-                            $('#pic').val(data.data);
-                            $('#show-img-1').css('display', 'block').html('<img src="' + data.data+ '" class="img-thumbnail"  />').css('max-height', '100px').css("max-width", '100px');
-                            return false;
-                        } else {
-                            $('.danger-content').html(data.errmsg);
-                            $('.alert-danger').show()
-                            return false;
-                        }
-                    }
-                });
-            });
         })
+
     </script>
 {% endblock scripts %}

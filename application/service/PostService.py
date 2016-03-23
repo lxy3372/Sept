@@ -5,14 +5,13 @@ from application.model.db import db
 from application.model.Post import Post, Tag, TagPost, Pic
 from application.model.User import User
 from flask import session
-from application.functions.helper import list_remove_repeat
+from application.functions.helper import list_remove_repeat, model_to_dict
 from sqlalchemy import func
 
 __author__ = 'Riky'
 
 
 class PostService(object):
-
     @staticmethod
     def add_post(post_dict):
         """
@@ -69,7 +68,6 @@ class PostService(object):
 
         return post
 
-
     @staticmethod
     def get_posts_list(limit, page, post_type=None, user_id=None, is_active=None, title=None):
         """
@@ -92,14 +90,45 @@ class PostService(object):
             query = query.filter(Post.post_title.like("%%%s%%" % title))
         posts_list = query.limit(limit).offset(offset).all()
         total = query.count()
-        print posts_list
         return posts_list, total
+
+    @staticmethod
+    def get_post_by_id(id):
+        """
+        获取文章详情
+        :param id:
+        :return:
+        """
+        sub = db.session.query(User.nickname, User.id).subquery()
+        posts = db.session.query(Post, sub.c.nickname).outerjoin((sub, Post.user_id == sub.c.id)).filter(
+            Post.post_id == id).first()
+        if posts is None:
+            return None
+        post_dict = {}
+        post_dict['posts'] = posts[0]
+        post_dict['nickname'] = posts[1]
+        post_dict['tag_obj_list'] = PostService.get_tags_in_id(map(int, post_dict['posts'].post_tag_id_str.split(',')))
+        post_dict['pic_obj_list'] = PostService.get_pic_in_id(map(int, post_dict['posts'].post_pic_id_str.split(',')))
+        return post_dict
+
+    @staticmethod
+    def get_tags_in_id(id_list):
+        if id_list is None:
+            return None
+        return Tag.query.filter(Tag.tag_id.in_(id_list)).all()
+
+    @staticmethod
+    def get_pic_in_id(id_list):
+        if id_list is None:
+            return None
+        return Pic.query.filter(Pic.pic_id.in_(id_list)).all()
 
     @staticmethod
     def get_tags_list(limit, page):
         offset = limit * (page - 1)
         sub = db.session.query(TagPost.tag_id, func.count('1').label('total')).group_by(TagPost.tag_id).subquery()
-        tags_list = db.session.query(Tag, sub.c.total).outerjoin((sub, Tag.tag_id == sub.c.tag_id)).order_by(Tag.tag_id).limit(limit).offset(offset).all()
+        tags_list = db.session.query(Tag, sub.c.total).outerjoin((sub, Tag.tag_id == sub.c.tag_id)).order_by(
+            Tag.tag_id).limit(limit).offset(offset).all()
         print tags_list
         total = Tag.query.count()
         return tags_list, total
