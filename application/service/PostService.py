@@ -5,7 +5,8 @@ from application.model.db import db
 from application.model.Post import Post, Tag, TagPost, Pic
 from application.model.User import User
 from flask import session
-from application.functions.helper import list_remove_repeat, model_to_dict
+from application.functions.helper import list_remove_repeat, InvalidUsage
+from application.functions.error import ErrorCode
 from sqlalchemy import func
 
 __author__ = 'Riky'
@@ -69,6 +70,62 @@ class PostService(object):
         return post
 
     @staticmethod
+    def update_posts(post_dict):
+        """
+        修改文章
+        :param post_dict: {post_id,post_title,post_content,post_seo,pic_list,is_active,tags,pic_list[]}
+        :return: post model
+        """
+
+        if post_dict['tags'] is not None:
+            tag_list = post_dict['tags'].split(',')
+            tag_lists = list_remove_repeat(tag_list)
+            tag_str = ""
+            tag_list = []
+            for tag in tag_lists:
+                if tag is not None and len(tag) > 0:
+                    tag_obj = Tag.query.filter(Tag.tag_name == tag.lower()).first()
+                    if tag_obj is None:
+                        tag_obj = Tag(tag_name=tag)
+                        db.session.add(tag_obj)
+                        db.session.flush()
+                    if tag_obj:
+                        tag_str += str(tag_obj.tag_id) + ','
+                        tag_list.append(tag_obj.tag_id)
+
+            pic_id_str = ""
+            if len(post_dict['pic_list']) > 0:
+                for pic_str in post_dict['pic_list']:
+                    if len(pic_str) == 0:
+                        continue
+                    pic_obj = Pic.query.filter(Pic.pic_url == pic_str).first()
+                    if pic_obj is None:
+                        pic_obj = Pic(pic_str)
+                        db.session.add(pic_obj)
+                        db.session.flush()
+                    if pic_obj:
+                        pic_id_str += str(pic_obj.pic_id) + ','
+
+        post = Post.query.get(post_dict['post_id'])
+        if post is None:
+            raise InvalidUsage(payload=ErrorCode.get_err_dict(ErrorCode.post_not_found))
+
+        post_old_tag_id_str = post.post_tag_id_str
+
+        update = {}
+        update[Post.post_title] = post_dict['post_title'] if post_dict['post_title'] is not None else ""
+        update[Post.post_content] = post_dict['post_content'] if post_dict['post_content'] is not None else ""
+        update[Post.post_seo] = post_dict['post_seo'] if post_dict['post_seo'] is not None else ""
+        update[Post.is_active] = post_dict['is_active'] if post_dict['is_active'] is not None else 1
+        update[Post.user_id] = session.get('users')['id']
+        update[Post.post_tag_id_str] = tag_str.strip(',')
+        update[Post.post_pic_id_str] = pic_id_str.strip(',')
+        update[Post.post_type] = post_dict['post_type']
+        Post.query.filter(Post.post_id == post.post_id).update(update)
+        db.session.commit()
+        return update
+
+    @staticmethod
     def get_posts_list(limit, page, post_type=None, user_id=None, is_active=None, title=None):
         """
         分页查询
@@ -88,7 +145,7 @@ class PostService(object):
             query = query.filter(Post.is_active == is_active)
         if title is not None:
             query = query.filter(Post.post_title.like("%%%s%%" % title))
-        posts_list = query.limit(limit).offset(offset).all()
+        posts_list = query.order_by(Post.post_id).limit(limit).offset(offset).all()
         total = query.count()
         return posts_list, total
 
@@ -129,6 +186,5 @@ class PostService(object):
         sub = db.session.query(TagPost.tag_id, func.count('1').label('total')).group_by(TagPost.tag_id).subquery()
         tags_list = db.session.query(Tag, sub.c.total).outerjoin((sub, Tag.tag_id == sub.c.tag_id)).order_by(
             Tag.tag_id).limit(limit).offset(offset).all()
-        print tags_list
         total = Tag.query.count()
         return tags_list, total
