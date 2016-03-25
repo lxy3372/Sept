@@ -46,7 +46,7 @@ def update_user(id):
     return dict(title=title, user=user)
 
 
-@admin.route("/admin/do_user", methods=['PUT'])
+@admin.route("/admin/user", methods=['PUT'])
 @login_required
 def do_update_user():
     if request.form['new_password'] is not None:
@@ -127,7 +127,7 @@ def get_posts_by_id(id):
     return dict(title=title, data=posts)
 
 
-@admin.route("/admin/posts/add", methods=['POST'])
+@admin.route("/admin/posts", methods=['POST'])
 @login_required
 def do_add_posts():
     post_dict = {}
@@ -148,6 +148,33 @@ def do_add_posts():
     except Exception as e:
         raise InvalidUsage(payload=ErrorCode.get_err_dict(ErrorCode.add_error), exception=e)
     return jsonify(make_ret(u'添加成功'))
+
+
+@admin.route("/admin/posts", methods=['PUT'])
+@login_required
+def do_update_posts():
+    post_dict = {}
+    # article
+    if request.form.get('post_id') is None:
+        raise InvalidUsage(ErrorCode.get_err_dict(ErrorCode.post_id_error))
+    elif int(request.form['post_type']) == 1 or int(request.form['post_type']) == 2:
+        post_dict['post_id'] = int(request.form.get('post_id'))
+        post_dict['post_title'] = request.form.get('post_title', '')
+        post_dict['post_content'] = request.form.get('post_content', '')
+        post_dict['post_seo'] = request.form.get('post_seo', '')
+        post_dict['post_type'] = request.form.get('post_type')
+        post_dict['tags'] = request.form.get('tags', '')
+        post_dict['pic_list'] = request.form.getlist('pic_str')
+        post_dict['is_active'] = int(request.form.get('is_active', 1))
+    else:
+        raise InvalidUsage(payload=ErrorCode.get_err_dict(ErrorCode.param_error))
+
+    try:
+        PostService.update_posts(post_dict)
+    except Exception as e:
+        print e.message
+        raise InvalidUsage(payload=ErrorCode.get_err_dict(ErrorCode.update_error), exception=e)
+    return jsonify(make_ret(u'修改成功'))
 
 
 @admin.route("/admin/tags", methods=['GET'], defaults={'page': 1})

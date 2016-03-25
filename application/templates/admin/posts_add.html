@@ -20,7 +20,8 @@
                         <label for="post_title" class="col-sm-1 control-label">标题</label>
 
                         <div class="col-sm-5">
-                            <input type="text" class="form-control" id="post_title" name="post_title" placeholder="随便说一句吧~~"
+                            <input type="text" class="form-control" id="post_title" name="post_title"
+                                   placeholder="随便说一句吧~~"
                                    value="">
                         </div>
                     </div>
@@ -46,16 +47,19 @@
                     </div>
                     <div class="form-group">
                         <label for="nickname" class="col-sm-1 control-label">是否发布</label>
+
                         <div class="checkbox col-sm-5">
                             <label for="is_active">
-                            <input type="checkbox" value="1" id="is_active" name="is_active" >是否发布
+                                <input type="checkbox" value="1" id="is_active" name="is_active">是否发布
                             </label>
                         </div>
                     </div>
                     <div class="form-group hide">
                         <label for="nickname" class="col-sm-1 control-label">内容</label>
+
                         <div class="checkbox col-sm-5">
-                            <textarea name="post_content" id="post_content" placeholder="请输入内容" cols="30" rows="10"></textarea>
+                            <textarea name="post_content" id="post_content" placeholder="请输入内容" cols="30"
+                                      rows="10"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -83,6 +87,7 @@
                     </div>
                     <div class="form-group">
                         <label for="tags" class="col-sm-1 control-label">标签</label>
+
                         <div class="col-sm-5">
                             <input type="text" class="form-control" id="tags" name="tags"
                                    placeholder="请输入个性标签并回车" data-toggle="tags">
@@ -90,7 +95,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-5 col-md-offset-1">
-                            <button type="button" class="btn btn-primary" id="add">添加</button>
+                            <button type="button" class="btn btn-primary" data-loading-text="提交中..." id="add">添加</button>
                         </div>
                     </div>
                 </form>
@@ -103,7 +108,8 @@
 {% block scripts %}
     {{ super() }}
     <script src="{{ url_for('static', filename='js/ajaxfileupload.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery.tags.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-tokenfield.min.css') }}">
+    <script src="{{ url_for('static', filename='js/bootstrap-tokenfield.min.js') }}"></script>
     <script language="javascript">
         $(function () {
             $(".close").click(function () {
@@ -121,13 +127,14 @@
                             $('.success-content').html(data.errmsg);
                             $('.alert-success').show()
                             pic_id = $('#file_id').val()
-                            $('#' + pic_id).parent().html("<img src='" + data.data + "' class='img-thumbnail' style='max-width:200px; max-height:200px;' /><input type='hidden' name='pic_str' value='"+data.data+"' />")
+                            $('#' + pic_id).parent().html("<img src='" + data.data + "' class='img-thumbnail' style='max-width:200px; max-height:200px;' /><input type='hidden' name='pic_str' value='" + data.data + "' />")
                         } else {
                             $('.danger-content').html(data.errmsg);
                             $('.alert-danger').show()
                         }
                         setTimeout(function () {
-                            $('.close').click()
+                            $('.alert-success').hide()
+                            $('.alert-danger').hide()
                         }, 3000)
                         return false;
                     }
@@ -149,24 +156,45 @@
                     }
                 }
             })
-            $('#add').click(function(){
+            $('#add').click(function () {
                 $.ajax({
-                    'url': '/admin/posts/add',
+                    'url': '/admin/posts',
                     'dataType': 'json',
                     'data': $('#post_add').serialize(),
                     'method': 'POST',
                     'success': function (data) {
+                        alert(data.ret)
                         if (data.ret == true) {
                             $('.success-content').html(data.errmsg);
                             $('.alert-success').show()
-                            return false;
                         } else {
                             $('.danger-content').html(data.errmsg);
                             $('.alert-danger').show()
-                            return false;
                         }
+                        setTimeout(function () {
+                            $('.alert-success').hide()
+                            $('.alert-danger').hide()
+                        }, 3000)
+                        return false;
                     }
                 })
+            })
+            $('#tags').tokenfield({
+                autocomplete: {
+                    source: ['red', 'blue', 'green', 'yellow', 'violet', 'brown', 'purple', 'black', 'white'],
+                    delay: 100
+                },
+                showAutocompleteOnFocus: true
+            })
+            $('#tags').on('tokenfield:createtoken', function (event) {
+                var available_tokens = bloodhound_tokens.index.datums
+                var exists = true;
+                $.each(available_tokens, function (index, token) {
+                    if (token.value === event.attrs.value)
+                        exists = false;
+                });
+                if (exists === true)
+                    event.preventDefault();
             })
         })
 

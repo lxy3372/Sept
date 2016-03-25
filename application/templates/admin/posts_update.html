@@ -7,21 +7,21 @@
                 <li class="active">修改文章</li>
             </ul>
             <div class="row sub-header" style="padding:20px;">
-                <form class="form-horizontal" id="post_add">
+                <form class="form-horizontal" id="post_update">
                     <div class="alert alert-danger " style="display: none">
-                        <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
                         <strong>警告！</strong><span class="danger-content"></span>。
                     </div>
                     <div class="alert alert-success " style="display: none;">
-                        <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
                         <strong>成功！</strong><span class="success-content"></span>。
                     </div>
                     <div class="form-group">
                         <label for="post_title" class="col-sm-1 control-label">标题</label>
 
                         <div class="col-sm-5">
-                            <input type="text" class="form-control" id="post_title" name="post_title" placeholder="随便说一句吧~~"
+                            <input type="text" class="form-control" id="post_title" name="post_title"
+                                   placeholder="随便说一句吧~~"
                                    value="{{ data['posts'].post_title }}">
+                            <input type="hidden" name="post_id" id="post_id" value="{{ data['posts'].post_id }}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -37,25 +37,31 @@
 
                         <div class="radio col-sm-5">
                             <label>
-                                <input type="radio" value="1" id="type1" name="post_type" {{ "checked='checked'" if data['posts'].post_type ==1 else "" }} />文章
+                                <input type="radio" value="1" id="type1"
+                                       name="post_type" {{ "checked='checked'" if data['posts'].post_type ==1 else "" }} />文章
                             </label>
                             <label>
-                                <input type="radio" value="2" id="type2" name="post_type" {{ "checked='checked'" if data['posts'].post_type ==2 else "" }}  />美图
+                                <input type="radio" value="2" id="type2"
+                                       name="post_type" {{ "checked='checked'" if data['posts'].post_type ==2 else "" }}  />美图
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="nickname" class="col-sm-1 control-label">是否发布</label>
+
                         <div class="checkbox col-sm-5">
                             <label for="is_active">
-                            <input type="checkbox" value="1" id="is_active" name="is_active" {{ "checked='checked'" if data['posts'].is_active==1 else "" }}   >是否发布
+                                <input type="checkbox" value="1" id="is_active"
+                                       name="is_active" {{ "checked='checked'" if data['posts'].is_active==1 else "" }}   >是否发布
                             </label>
                         </div>
                     </div>
                     <div class="form-group hide">
                         <label for="nickname" class="col-sm-1 control-label">内容</label>
+
                         <div class="checkbox col-sm-5">
-                            <textarea name="post_content" id="post_content" placeholder="请输入内容" cols="30" rows="10">{{ data['posts'].post_content }}</textarea>
+                            <textarea name="post_content" id="post_content" placeholder="请输入内容" cols="30"
+                                      rows="10">{{ data['posts'].post_content }}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -65,15 +71,39 @@
                             <table class="table table-bordered pic-table">
                                 <tr>
                                     <td id="pic1">
+                                        {% if data['pic_obj_list'][0] %}
+                                            <button type="button" class="close" aria-label="Close" style="position: absolute; margin-left: 6px;"><span aria-hidden="true">&times;</span></button>
+                                            <img src='{{ data['pic_obj_list'][0].pic_url }}' class='img-thumbnail'
+                                                 style='max-width:200px; max-height:200px;'/>
+                                        {% else %}
                                         <button type="button" class="btn btn-primary upload-btn">上传</button>
+                                        {% endif %}
+                                        <input type='hidden' name='pic_str'
+                                               value='{{ data['pic_obj_list'][0].pic_url if data['pic_obj_list'][0] else "" }}'/>
                                         <input type="file" name="file" id="file1" class="file" style="display: none">
                                     </td>
                                     <td id="pic2">
-                                        <button type="button" class="btn btn-primary upload-btn">上传</button>
+                                        {% if data['pic_obj_list'][1] %}
+                                            <button type="button" class="close" aria-label="Close" style="position: absolute; margin-left: 6px;"><span aria-hidden="true">&times;</span></button>
+                                            <img src='{{ data['pic_obj_list'][1].pic_url }}' class='img-thumbnail'
+                                                 style='max-width:200px; max-height:200px;'/>
+                                        {% else %}
+                                            <button type="button" class="btn btn-primary upload-btn">上传</button>
+                                        {% endif %}
+                                        <input type='hidden' name='pic_str'
+                                               value='{{ data['pic_obj_list'][1].pic_url if data['pic_obj_list'][1] else "" }}'/>
                                         <input type="file" name="file" id="file1" class="file" style="display: none">
                                     </td>
                                     <td id="pic3">
-                                        <button type="button" class="btn btn-primary upload-btn">上传</button>
+                                        {% if data['pic_obj_list'][2] %}
+                                            <button type="button" class="close" aria-label="Close" style="position: absolute; margin-left: 6px;"><span aria-hidden="true">&times;</span></button>
+                                            <img src='{{ data['pic_obj_list'][2].pic_url }}' class='img-thumbnail'
+                                                 style='max-width:200px; max-height:200px;'/>
+                                        {% else %}
+                                            <button type="button" class="btn btn-primary upload-btn">上传</button>
+                                        {% endif %}
+                                        <input type='hidden' name='pic_str'
+                                               value='{{ data['pic_obj_list'][2].pic_url if data['pic_obj_list'][2] else "" }}'/>
                                         <input type="file" name="file" id="file1" class="file" style="display: none">
                                     </td>
                                 </tr>
@@ -83,14 +113,16 @@
                     </div>
                     <div class="form-group">
                         <label for="tags" class="col-sm-1 control-label">标签</label>
+
                         <div class="col-sm-5">
                             <input type="text" class="form-control" id="tags" name="tags"
-                                   placeholder="请输入个性标签并回车" data-toggle="tags" value="{{ data['tag_obj_list'][0].tag_name }}">
+                                   placeholder="请输入个性标签并回车" data-toggle="tags"
+                                   value="{% for tag in data['tag_obj_list'] %}{{ tag.tag_name }},{% endfor %}">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-5 col-md-offset-1">
-                            <button type="button" class="btn btn-primary" id="add">修改</button>
+                            <button type="button" class="btn btn-primary" id="update">修改</button>
                         </div>
                     </div>
                 </form>
@@ -103,12 +135,10 @@
 {% block scripts %}
     {{ super() }}
     <script src="{{ url_for('static', filename='js/ajaxfileupload.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery.tags.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-tokenfield.min.css') }}">
+    <script src="{{ url_for('static', filename='js/bootstrap-tokenfield.min.js') }}"></script>
     <script language="javascript">
         $(function () {
-            $(".close").click(function () {
-                $(".alert").alert('close');
-            });
             function upload() {
                 $.ajaxFileUpload({
                     url: "/admin/do_upload",
@@ -121,19 +151,46 @@
                             $('.success-content').html(data.errmsg);
                             $('.alert-success').show()
                             pic_id = $('#file_id').val()
-                            $('#' + pic_id).parent().html("<img src='" + data.data + "' class='img-thumbnail' style='max-width:200px; max-height:200px;' /><input type='hidden' name='pic_str' value='"+data.data+"' />")
+                            $('#' + pic_id).parent().html("<img src='" + data.data + "' class='img-thumbnail' style='max-width:200px; max-height:200px;' /><input type='hidden' name='pic_str' value='" + data.data + "' />")
                         } else {
                             $('.danger-content').html(data.errmsg);
                             $('.alert-danger').show()
                         }
                         setTimeout(function () {
-                            $('.close').click()
+                            $('.alert-success').hide()
+                            $('.alert-danger').hide()
                         }, 3000)
                         return false;
                     }
                 });
             }
 
+            $('#update').click(function () {
+                $.ajax({
+                    'url': '/admin/posts',
+                    'dataType': 'json',
+                    'data': $('#post_update').serialize(),
+                    'method': 'PUT',
+                    'success': function (data) {
+                        if (data.ret == true) {
+                            $('.success-content').html(data.errmsg);
+                            $('.alert-success').show()
+                        } else {
+                            $('.danger-content').html(data.errmsg);
+                            $('.alert-danger').show()
+                        }
+                        setTimeout(function () {
+                            $('.alert-success').hide()
+                            $('.alert-danger').hide()
+                        }, 3000)
+                        return false;
+                    }
+                })
+            })
+            $('#tags').tokenfield()
+            $('.close').bind('click',function(){
+                $(this).parent().html('<button type="button" class="btn btn-primary upload-btn">上传</button><input type="file" name="file" id="file1" class="file" style="display: none">')
+            })
             $('.upload-btn').click(function () {
                 var upload_id = $(this).siblings('.file').attr('id')
                 $('#file_id').val(upload_id)
@@ -148,25 +205,6 @@
                         upload()
                     }
                 }
-            })
-            $('#add').click(function(){
-                $.ajax({
-                    'url': '/admin/posts/add',
-                    'dataType': 'json',
-                    'data': $('#post_add').serialize(),
-                    'method': 'POST',
-                    'success': function (data) {
-                        if (data.ret == true) {
-                            $('.success-content').html(data.errmsg);
-                            $('.alert-success').show()
-                            return false;
-                        } else {
-                            $('.danger-content').html(data.errmsg);
-                            $('.alert-danger').show()
-                            return false;
-                        }
-                    }
-                })
             })
         })
 

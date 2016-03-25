@@ -17,6 +17,8 @@ class ErrorCode(object):
     upload_not_found = [5, u'您没有上传任何文件']
     param_error = [6, u'参数错误']
     confirm_pwd_error = [7, u'确认密码与新密码不一致']
+    post_id_error = [8, u'非法参数:post_id']
+    post_not_found = [9, u'没有找到此文章']
 
     @staticmethod
     def get_err_dict(code, errmsg=None, errcode=None):
