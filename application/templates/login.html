@@ -28,6 +28,9 @@
                 <input type="password" class="form-control" name="password" id="password" placeholder="Password">
             </div>
             <button type="submit" class="btn btn-success form-control" name="submit">Log in</button>
+            <div class="form-group" style="margin-top:10px;">
+                <a href="{{ url_for('main.index') }}">返回首页</a>
+            </div>
         </form>
     </div>
 {% endblock content %}
