@@ -1,23 +1,63 @@
 {% extends "bootstrap/base.html" %}
-{% block title %}This is an example page{% endblock %}
 {% block head %}
-    {{ super() }}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-{% endblock %}
-{% block body_attribs %} class="index_body" {% endblock body_attribs %}
-{% block navbar %}
-    <div class="navbar navbar-fixed-top">
-        <!-- ... -->
-    </div>
-{% endblock navbar %}
+    <title>{% block title %}{{ config['APP_TITLE'] }}{{ title|default }}{% endblock title %}</title>
 
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    {%- block metas %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%- endblock metas %}
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <script src="{{ url_for('static', filename='js/react/react.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/react/react-dom.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/react/browser.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
+{% endblock %}
+{% block body_attribs %} class="body" {% endblock body_attribs %}
+{% block navbar %}
+    {% if session['users'] %}
+        {% include "admin/sidebar.html" %}
+    {% endif %}
+{% endblock navbar %}
 {% block content %}
-    <div class="index">
-        {% if option %}
-            <h1>{{ option }} is OK!</h1>
-        {% else %}
-            <h1>About Sept!</h1>
-        {% endif %}
+    <div class="container">
+        <header class="header content-box">
+            <div class="header-title">
+                <h1 class="logo">
+                    <a href="">title</a>
+                </h1>
+
+                <h2 class="subtitle">
+                    <small>Secondary text</small>
+                </h2>
+            </div>
+        </header>
+        <div class="content">
+            <section class="main">
+                <div class="content-box box-inner">
+                    <div class="article-box">
+                        <header class="article-title">
+                            <h1>
+                                <span class="article-title-li">●</span><a href="">title</a>
+                            </h1>
+                        </header>
+                        <div class="article-entry">
+                            <p>
+                                asfasdf
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <aside class="sider">
+                <div class="content-box"></div>
+            </aside>
+        </div>
     </div>
+    {% block footer %}
+    {% endblock footer %}
 {% endblock content %}
+{% block scripts %}
+{% endblock scripts %}http://120.24.244.1/static/ad/rule_male.html

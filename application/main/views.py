@@ -12,12 +12,10 @@ from . import main
 
 @main.route('/')
 @main.route('/index')
-@login_required
 @templated(template='index.html')
 def index():
     title = get_title_by_func(index.func_name)
-    anything = "asdfsdf"
-    return render_template('index.html', option=anything, title=title)
+    return render_template('index.html', title=title)
 
 
 @main.route('/about')
