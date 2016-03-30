@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
 
-__author__ = 'Ricky'
 
 from flask import render_template, flash, redirect, jsonify, request, url_for
 from application.service.UserService import UserService
-from application.functions.error import make_ret
+from application.functions.error import make_ret, ErrorCode
 from application.functions.helper import login_required, get_title_by_func, templated, InvalidUsagePage, InvalidUsage
+from application.service.PostService import PostService
 from . import main
+
+__author__ = 'Ricky'
 
 
 @main.route('/')
@@ -16,6 +18,23 @@ from . import main
 def index():
     title = get_title_by_func(index.func_name)
     return render_template('index.html', title=title)
+
+
+@main.route('/id/<int:id>', methods=['GET'])
+@templated(template='post.html')
+def post(id):
+    post_data = PostService.get_post_by_id(id)
+    if post_data is None:
+        raise InvalidUsagePage(ErrorCode.get_err_dict(ErrorCode.post_not_found), status_code=404)
+    title = post_data['posts'].post_title
+    print post_data
+    return dict(title=title, data=post_data)
+
+
+@main.route('/post/<string:seo_key>', methods=['GET'])
+def post_by_key(seo_key):
+    title = ''
+    return dict(title=title)
 
 
 @main.route('/about')
