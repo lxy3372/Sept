@@ -12,18 +12,52 @@ from . import main
 __author__ = 'Ricky'
 
 
-@main.route('/')
 @main.route('/index')
+@main.route('/')
 @templated(template='index.html')
 def index():
+    """
+    Home page
+    """
     title = get_title_by_func(index.func_name)
     return render_template('index.html', title=title)
+
+
+@main.route('/posts/page/<int:page>', methods=['get'])
+def get_posts_by_page(page):
+    """
+    ajax 加载分组数据
+    """
+    page = page if page > 0 else 1
+    post_data, total = PostService.get_posts_dicts(limit=5, page=page)
+    if post_data is None:
+        raise InvalidUsage(ErrorCode.get_err_dict(ErrorCode.post_list_not_found))
+    is_end = True if total <= page*5 else False
+    return jsonify(make_ret(msg='ok', data={'list': post_data, 'total': total, 'is_end': is_end}))
 
 
 @main.route('/id/<int:id>', methods=['GET'])
 @templated(template='post.html')
 def post(id):
+    """
+    Post detail by post_id
+    :param id: post_id
+    """
     post_data = PostService.get_post_by_id(id)
+    if post_data is None:
+        raise InvalidUsagePage(ErrorCode.get_err_dict(ErrorCode.post_not_found), status_code=404)
+    title = post_data['posts'].post_title
+    return dict(title=title, data=post_data)
+
+
+@main.route('/post/<string:seo_key>', methods=['GET'])
+@templated(template='post.html')
+def post_by_key(seo_key):
+    """
+    Post detail by post_seo
+    :param seo_key:  post_seo
+    """
+    post_data = PostService.get_post_by_seo_key(seo_key)
     if post_data is None:
         raise InvalidUsagePage(ErrorCode.get_err_dict(ErrorCode.post_not_found), status_code=404)
     title = post_data['posts'].post_title
@@ -31,26 +65,31 @@ def post(id):
     return dict(title=title, data=post_data)
 
 
-@main.route('/post/<string:seo_key>', methods=['GET'])
-def post_by_key(seo_key):
-    title = ''
-    return dict(title=title)
-
-
 @main.route('/about')
 def templates(anything=None):
+    """
+    About page
+    """
     return "hello world"
 
 
 @main.route('/login', methods=['GET'])
 @templated(template='login.html')
 def login_page():
+    """
+    Login page
+    """
     title = get_title_by_func(login_page.func_name)
     return dict(option='', title=title)
 
 
 @main.route('/do_login', methods=['POST'])
 def do_login():
+    """
+    Ajax login
+    :return:
+    :rtype:
+    """
     email = request.form['email']
     password = request.form['password']
     ret = UserService.login(email, password)
@@ -60,6 +99,9 @@ def do_login():
 @main.route("/logout")
 @login_required
 def logout():
+    """
+    log out
+    """
     UserService.logout()
     flash("Logged out.")
     return redirect('/login')

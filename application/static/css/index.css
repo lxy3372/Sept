@@ -78,6 +78,7 @@
     margin: 0px;
     padding: 0px;
     overflow: hidden;
+    background-color: #4eb7fa;
 }
 
 .article-box .article-title h2 {
@@ -107,8 +108,6 @@
 }
 
 .article-entry {
-    border-left: solid 1px #aaa;
-    border-right: solid 1px #aaa;
 }
 
 .article-entry p {
@@ -213,4 +212,8 @@ hr.style-one {
 .ds-recent-visitors, .ds-recent-comments {
     margin: 0px;
     padding: 0px;
+}
+
+.pager li a {
+    cursor: pointer;
 }

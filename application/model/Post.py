@@ -23,7 +23,7 @@ class Post(db.Model):
     post_tag_id_str = Column(db.String(100))
     post_pic_id_str = Column(db.String(100))
     create_time = Column(db.DateTime)
-    update_time= Column(db.DateTime)
+    update_time = Column(db.DateTime)
     is_active = Column(db.Integer)
     post_seo = Column(db.String(255))
 
@@ -49,6 +49,7 @@ class Post(db.Model):
     def to_dict(self):
         return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
 
+
 class Tag(db.Model):
     """
     tag model
@@ -59,7 +60,7 @@ class Tag(db.Model):
     tag_name = Column(db.String(100), unique=True)
     create_time = Column(db.DateTime)
 
-    def __init__(self,tag_name, create_time=None):
+    def __init__(self, tag_name, create_time=None):
         self.tag_name = tag_name
         self.create_time = create_time if create_time else datetime.utcnow()
 
@@ -86,6 +87,9 @@ class TagPost(db.Model):
     def __init__(self, tag_id, post_id):
         self.tag_id = tag_id
         self.post_id = post_id
+
+    def to_dict(self):
+        return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
 
 
 class Pic(db.Model):

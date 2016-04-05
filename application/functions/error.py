@@ -20,6 +20,9 @@ class ErrorCode(object):
     post_id_error = [8, u'非法参数:post_id']
     post_not_found = [9, u'没有找到此文章']
 
+    post_list_not_found = [10, u'没有更多了']
+
+
     @staticmethod
     def get_err_dict(code, errmsg=None, errcode=None):
         """
