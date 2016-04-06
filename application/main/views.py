@@ -20,10 +20,12 @@ def index():
     Home page
     """
     title = get_title_by_func(index.func_name)
-    return render_template('index.html', title=title)
+    page = request.args.get('p')
+    page = page if page > 0 else 1
+    return render_template('index.html', title=title, page=page)
 
 
-@main.route('/posts/page/<int:page>', methods=['get'])
+@main.route('/posts/page/<int:page>', methods=['GET'])
 def get_posts_by_page(page):
     """
     ajax 加载分组数据
@@ -61,7 +63,6 @@ def post_by_key(seo_key):
     if post_data is None:
         raise InvalidUsagePage(ErrorCode.get_err_dict(ErrorCode.post_not_found), status_code=404)
     title = post_data['posts'].post_title
-    print post_data
     return dict(title=title, data=post_data)
 
 

@@ -151,6 +151,14 @@ class PostService(object):
 
     @staticmethod
     def get_posts_dicts(limit, page, post_type=None, title=None):
+        """
+        分页获取posts bo 字典
+        :param limit:
+        :param page:
+        :param post_type:
+        :param title:
+        :return:
+        """
         offset = limit * (page - 1)
         query = Post.query;
         if post_type is not None:

@@ -22,6 +22,9 @@
     {% endif %}
 {% endblock navbar %}
 {% block content %}
+    <div id="progress">
+        <span></span>
+    </div>
     <div class="container">
         {% include "header.html" %}
         <div class="content">
@@ -50,6 +53,11 @@
         </div>
     </div>
     {% block footer %}
+        <nav class="container footer-box">
+            <div class="footer-copy">
+                &copy;Copyright 2016 <a href="http://{{ config['HOST'] }}" >{{ config['HOST'] }}</a> All Rights Reserved.
+            </div>
+        </nav>
     {% endblock footer %}
 {% endblock content %}
 {% block scripts %}
@@ -62,7 +70,7 @@
                     total: 0,
                     list: [],
                     loading: true,
-                    page: 1,
+                    page: {{ page }},
                     is_end: false
                 };
             },
@@ -81,33 +89,26 @@
                     }
                 }.bind(this));
             },
-
-            handleClick: function(status, e) {
-                var now_page = status == 'N' ? this.state.page+1 : this.state.page-1;
-                if(now_page < 1){
-                    now_page = 1;
-                }
-                this.setState({
-                    page: now_page,
-                    loading: true,
-                })
-            },
-
             render: function () {
-                alert();
                 if(this.state.loading ==false){
                     var items = this.state.list.map(function(item, index) {
                         return (
                                 <Article data={item} key={index} />
                         );
                     })
+                    var pre = this.state.page -1 > 0 ? this.state.page -1 : 1;
+                    var pre_url = "http://{{ config['HOST'] }}?p="+pre
+                    var pre_display = this.state.page <= 1 ? "hide" : "previous";
+                    var next = this.state.is_end == false ? this.state.page + 1 : this.state.page;
+                    var next_url = "http://{{ config['HOST'] }}?p="+next
+                    var next_display = this.state.is_end == true ? "hide" : "next";
                     return (
                             <div>
                                 {items}
                                 <nav>
                                     <ul className="pager">
-                                    <li className="previous " onClick={this.handleClick.bind(this, 'P')}><a ><span aria-hidden="true">&larr;</span> Older</a></li>
-                                    <li className="next" onClick={this.handleClick.bind(this, 'N')}><a >Newer <span aria-hidden="true">&rarr;</span></a></li>
+                                    <li className={pre_display} ><a href={pre_url} ><span aria-hidden="true">&larr;上一页</span> </a></li>
+                                    <li className={next_display} ><a href={next_url} ><span aria-hidden="true">下一页&rarr;</span></a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -195,7 +196,7 @@
 
                     return (
                             <div className={active} key={index}>
-                            <img src={item.pic_url} alt="..." />
+                            <img className="init-pic" src={item.pic_url} alt="..." />
                             <div className="carousel-caption"></div>
                             </div>
                     );
@@ -234,10 +235,11 @@
         var ArticleHeader = React.createClass({
             render: function() {
                 var article = this.props.data;
+                var url = article.post_seo ? "http://{{ config['HOST'] }}/post/"+article.post_seo : "http://{{ config['HOST'] }}/id/"+article.post_id;
                 return (
                         <header className="article-title" >
                             <h2>
-                                <a href=""><span className="glyphicon glyphicon-picture" aria-hidden="true"></span>{article.post_title}</a>
+                                <a href={url} ><span className="glyphicon glyphicon-picture" aria-hidden="true"></span>{article.post_title}</a>
                             </h2>
                         </header>
                 );
@@ -263,6 +265,21 @@
             ds.charset = 'UTF-8';
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
         })();
+        $({property: 0}).animate({property: 100}, {
+            duration: 2000,
+            step: function () {
+                var percentage = Math.round(this.property);
+
+                $('#progress').css('width', percentage + "%");
+
+                if (percentage == 100) {
+                    $("#progress").addClass("done");//完成，隐藏进度条
+                }
+            }
+        });
+        $('img').error(function(){
+            $(this).src("{{ url_for('static', filename='img/loading.gif') }}");
+        })
     </script>
     <!--多说js加载结束，一个页面只需要加载一次 -->
 {% endblock scripts %}
