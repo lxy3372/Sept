@@ -133,7 +133,7 @@ class PostService(object):
         :param page:
         :param post_type: 查找类型
         :param user_id: 用户id
-        :return:  list[User]
+        :return:  list[Post]
         """
         offset = limit * (page - 1)
         query = db.session.query(Post, User).filter(Post.user_id == User.id);
@@ -150,6 +150,45 @@ class PostService(object):
         return posts_list, total
 
     @staticmethod
+    def get_posts_dicts(limit, page, post_type=None, title=None):
+        """
+        分页获取posts bo 字典
+        :param limit:
+        :param page:
+        :param post_type:
+        :param title:
+        :return:
+        """
+        offset = limit * (page - 1)
+        query = Post.query;
+        if post_type is not None:
+            query = query.filter(Post.post_type == post_type)
+        if title is not None:
+            query = query.filter(Post.post_title.like("%%%s%%" % title))
+        posts_list = query.order_by(Post.post_id).limit(limit).offset(offset).all()
+        total = query.count()
+
+        posts_dicts = []
+        for post in posts_list:
+            post_dict = {}
+            post_dict['posts'] = post.to_dict()
+            tags_list = PostService.get_tags_in_id(map(int, post.post_tag_id_str.split(',')))
+            post_dict['tags_list'] = []
+            if tags_list is not None:
+                for tag in tags_list:
+                    post_dict['tags_list'].append(tag.to_dict())
+
+            post_dict['pic_list'] = []
+            pics_list = PostService.get_pic_in_id(map(int, post.post_pic_id_str.split(',')))
+            if pics_list is not None:
+                for pic in pics_list:
+                    post_dict['pic_list'].append(pic.to_dict())
+
+            posts_dicts.append(post_dict)
+
+        return posts_dicts, total
+
+    @staticmethod
     def get_post_by_id(id):
         """
         获取文章详情
@@ -159,6 +198,25 @@ class PostService(object):
         sub = db.session.query(User.nickname, User.id).subquery()
         posts = db.session.query(Post, sub.c.nickname).outerjoin((sub, Post.user_id == sub.c.id)).filter(
             Post.post_id == id).first()
+        if posts is None:
+            return None
+        post_dict = {}
+        post_dict['posts'] = posts[0]
+        post_dict['nickname'] = posts[1]
+        post_dict['tag_obj_list'] = PostService.get_tags_in_id(map(int, post_dict['posts'].post_tag_id_str.split(',')))
+        post_dict['pic_obj_list'] = PostService.get_pic_in_id(map(int, post_dict['posts'].post_pic_id_str.split(',')))
+        return post_dict
+
+    @staticmethod
+    def get_post_by_seo_key(seo_key):
+        """
+        获取文章详情
+        :param seo_key: 对应post_seo
+        :return:
+        """
+        sub = db.session.query(User.nickname, User.id).subquery()
+        posts = db.session.query(Post, sub.c.nickname).outerjoin((sub, Post.user_id == sub.c.id)).filter(
+            Post.post_seo == seo_key).first()
         if posts is None:
             return None
         post_dict = {}

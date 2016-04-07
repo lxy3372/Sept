@@ -22,216 +22,20 @@
     {% endif %}
 {% endblock navbar %}
 {% block content %}
+    <div id="progress">
+        <span></span>
+    </div>
     <div class="container">
-        <header class="header content-box">
-            <div class="header-title">
-                <h1 class="logo">
-                    <a href="">title</a>
-                </h1>
-
-                <h2 class="subtitle">
-                    <small>Secondary text</small>
-                </h2>
-            </div>
-        </header>
+        {% include "header.html" %}
         <div class="content">
             <section class="main">
-                <div class="content-box box-inner">
-
-                    <article class="article-box">
-                        <header class="article-title" style="background-color: #4eb7fa;">
-                            <h2>
-                                {#                                <span class="article-title-li">●</span>#}
-                                <a href=""><span class="glyphicon glyphicon-picture" aria-hidden="true"></span>title</a>
-                            </h2>
-                        </header>
-                        <div class="article-entry">
-                            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                                <!-- Indicators -->
-                                <ol class="carousel-indicators">
-                                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                                </ol>
-
-                                <!-- Wrapper for slides -->
-                                <div class="carousel-inner" role="listbox">
-                                    <div class="item active">
-                                        <img src="http://7xi3xm.com1.z0.glb.clouddn.com/banner.jpg" alt="...">
-
-                                        <div class="carousel-caption">
-                                            次奥
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <img src="http://7xi3xm.com1.z0.glb.clouddn.com/love.png" alt="...">
-
-                                        <div class="carousel-caption">
-                                            额呵
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <img src="http://7xi3xm.com1.z0.glb.clouddn.com/5.jpg" alt="...">
-
-                                        <div class="carousel-caption">
-                                            晕死
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Controls -->
-                                <a class="left carousel-control" href="#carousel-example-generic" role="button"
-                                   data-slide="prev">
-                                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="right carousel-control" href="#carousel-example-generic" role="button"
-                                   data-slide="next">
-                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="article-footer">
-                            <div class="tags">
-                                <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                                <a class="tag">#标签</a>
-                                <a class="tag">#PHP</a>
-                                <a class="tag">#PHP</a>
-                            </div>
-                            <div class="tags">
-                                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                                <a class="tag ds-thread-count" data-thread-key="{{ config['DUOSHUO_SECRET_KEY'] }}" data-count-type="comments"></a>
-                            </div>
-{#                            <div class="tags">
-                                <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
-                                <a class="tag">30</a>
-                            </div>#}
-                            <div class="posted-time">
-                                <span class="">2016-03-29</span>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </article>
-
-                    <hr class="style-one">
-
-                    <article class="article-box">
-                        <header class="article-title" style="background-color: #42d7bd;">
-                            <h2>
-                                {#                                <span class="article-title-li">●</span>#}
-                                <a href=""><span class="glyphicon glyphicon-picture" aria-hidden="true"></span>title</a>
-                            </h2>
-                        </header>
-                        <div class="article-entry">
-                            <div id="carousel-example-generi" class="carousel slide" data-ride="carousel">
-                                <!-- Indicators -->
-                                <ol class="carousel-indicators">
-                                    <li data-target="#carousel-example-generi" data-slide-to="0" class="active"></li>
-                                    <li data-target="#carousel-example-generi" data-slide-to="1"></li>
-                                    <li data-target="#carousel-example-generi" data-slide-to="2"></li>
-                                </ol>
-
-                                <!-- Wrapper for slides -->
-                                <div class="carousel-inner" role="listbox">
-                                    <div class="item active">
-                                        <img src="http://7xi3xm.com1.z0.glb.clouddn.com/banner.jpg" alt="...">
-
-                                        <div class="carousel-caption">
-                                            次奥
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <img src="http://7xi3xm.com1.z0.glb.clouddn.com/love.png" alt="...">
-
-                                        <div class="carousel-caption">
-                                            额呵
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <img src="http://7xi3xm.com1.z0.glb.clouddn.com/5.jpg" alt="...">
-
-                                        <div class="carousel-caption">
-                                            晕死
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Controls -->
-                                <a class="left carousel-control" href="#carousel-example-generi" role="button"
-                                   data-slide="prev">
-                                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="right carousel-control" href="#carousel-example-generi" role="button"
-                                   data-slide="next">
-                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="article-footer">
-                            <div class="tags">
-                                <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                                <a class="tag">#标签</a>
-                                <a class="tag">#PHP</a>
-                                <a class="tag">#PHP</a>
-                            </div>
-                            <div class="tags">
-                                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                                <a class="tag ds-thread-count" data-thread-key="{{ config['DUOSHUO_SECRET_KEY'] }}" data-count-type="comments"></a>
-                            </div>
-                            <div class="posted-time">
-                                <span class="">2016-03-29</span>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </article>
-
-                    <hr class="style-one">
-
-                    <article class="article-box">
-                        <header class="article-title" style="background-color: #8259f8;">
-                            <h2>
-                                {#                                <span class="article-title-li">●</span>#}
-                                <a href="">
-                                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
-                                    title</a>
-                            </h2>
-                        </header>
-                        <div class="article-entry">
-                            <p>
-                                12312313198230912312
-                            </p>
-                        </div>
-                        <div class="article-footer">
-                            <div class="tags">
-                                <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                                <a class="tag">#标签</a>
-                                <a class="tag">#PHP</a>
-                                <a class="tag">#PHP</a>
-                            </div>
-                            <div class="tags">
-                                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                                <a class="tag ds-thread-count" data-thread-key="{{ config['DUOSHUO_SECRET_KEY'] }}" data-count-type="comments"></a>
-                            </div>
-                            <div class="posted-time">
-                                <span class="">2016-03-29</span>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </article>
-
-                    <hr class="style-one">
-
-                    <nav class="page">
-                        加载更多...
-                    </nav>
+                <div class="content-box box-inner" id="article-list">
                 </div>
             </section>
             <aside class="sider">
                 <div class="widget-wrap">
                     <h3 class="widget-title">最近访客</h3>
+
                     <div class="widget-content">
                         <ul class="ds-recent-visitors" data-num-items="10"></ul>
                     </div>
@@ -239,17 +43,217 @@
 
                 <div class="widget-wrap">
                     <h3 class="widget-title">最近评论</h3>
+
                     <div class="widget-content">
-                        <ul class="ds-recent-comments" data-num-items="10" data-show-avatars="1" data-show-time="0" data-show-title="1"></ul>
+                        <ul class="ds-recent-comments" data-num-items="10" data-show-avatars="1" data-show-time="0"
+                            data-show-title="1"></ul>
                     </div>
                 </div>
             </aside>
         </div>
     </div>
     {% block footer %}
+        <nav class="container footer-box">
+            <div class="footer-copy">
+                &copy;Copyright 2016 <a href="http://{{ config['HOST'] }}" >{{ config['HOST'] }}</a> All Rights Reserved.
+            </div>
+        </nav>
     {% endblock footer %}
 {% endblock content %}
 {% block scripts %}
+    <script type="text/babel">
+        var Test = React.createClass({
+            getInitialState: function () {
+                return {
+                    ret: false,
+                    errmsg: '',
+                    total: 0,
+                    list: [],
+                    loading: true,
+                    page: {{ page }},
+                    is_end: false
+                };
+            },
+            componentDidMount: function () {
+                $.get(this.props.source+this.state.page, function (result) {
+                    var ajax_data= result;
+                    if (this.isMounted()) {
+                        this.setState({
+                            ret: ajax_data.ret,
+                            errmsg: ajax_data.errmsg,
+                            total: ajax_data.data.total,
+                            list: ajax_data.data.list,
+                            loading: false,
+                            is_end: ajax_data.data.is_end
+                        });
+                    }
+                }.bind(this));
+            },
+            render: function () {
+                if(this.state.loading ==false){
+                    var items = this.state.list.map(function(item, index) {
+                        return (
+                                <Article data={item} key={index} />
+                        );
+                    })
+                    var pre = this.state.page -1 > 0 ? this.state.page -1 : 1;
+                    var pre_url = "http://{{ config['HOST'] }}?p="+pre
+                    var pre_display = this.state.page <= 1 ? "hide" : "previous";
+                    var next = this.state.is_end == false ? this.state.page + 1 : this.state.page;
+                    var next_url = "http://{{ config['HOST'] }}?p="+next
+                    var next_display = this.state.is_end == true ? "hide" : "next";
+                    return (
+                            <div>
+                                {items}
+                                <nav>
+                                    <ul className="pager">
+                                    <li className={pre_display} ><a href={pre_url} ><span aria-hidden="true">&larr;上一页</span> </a></li>
+                                    <li className={next_display} ><a href={next_url} ><span aria-hidden="true">下一页&rarr;</span></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                    );
+                }else{
+                    return (
+                        <img src="{{ url_for('static', filename='img/loading.gif') }}" />
+                    );
+                }
+            }
+        });
+
+        var Article = React.createClass({
+            render:function() {
+                var article_data = this.props.data;
+                var posts = article_data.posts;
+                var pic_list = article_data.pic_list;
+                var tag_list = article_data.tags_list;
+                var post_pic_id = "#post_pic_"+posts.post_id
+                var post_pic = "post_pic_"+posts.post_id
+                return (
+                        <article className="article-box">
+                        <div className="article-entry">
+                                <ArticleHeader data={posts} />
+                            <div id={post_pic} className="carousel slide" data-ride="carousel">
+                                    <ArticlePicLi post_id={posts.post_id} pic_list={pic_list} />
+                                            <ArticlePic post_id={posts.post_id} pic_list={pic_list} />
+
+                                            <a className="left carousel-control" href={post_pic_id} role="button"data-slide="prev">
+                                                <span className="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                                <span className="sr-only">Previous</span>
+                                            </a>
+                                            <a className="right carousel-control" href={post_pic_id} role="button" data-slide="next">
+                                                <span className="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                                <span className="sr-only">Next</span>
+                                            </a>
+                            </div>
+                        </div>
+                        <div className="article-footer">
+                            <div className="tags">
+                                <span className="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                                <ArticleTags data={tag_list} key="tags" />
+                            </div>
+                            <div className="tags">
+                                <span className="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                                <a className="tag ds-thread-count" data-thread-key="{posts.post_id}"
+                                   data-count-type="comments"></a>
+                            </div>
+                            <div className="posted-time">
+                                <span className="">{posts.create_time}</span>
+                            </div>
+                            <div className="clearfix"></div>
+                        </div>
+                        <hr className="style-one" />
+                        </article>
+                );
+            }
+        })
+
+        var ArticleTags = React.createClass({
+            render: function() {
+                var li_items = this.props.data.map(function(item, index) {
+                    return (
+                            <a className="tag" key={index} >#{item.tag_name}</a>
+                    );
+                })
+                return (
+                        <span>
+                        {li_items}
+                        </span>
+                )
+            }
+        });
+
+        var ArticlePic = React.createClass({
+            render: function() {
+                var pic_list = this.props.pic_list;
+                var post_id = this.props.post_id;
+                var li_items = this.props.pic_list.map(function(item, index) {
+                    var active="item"
+                    if(index == 0){
+                        active="active item"
+                    }
+                    var post_pic_id = "#post_pic_"+post_id;
+
+                    return (
+                            <div className={active} key={index}>
+                            <img className="init-pic" src={item.pic_url} alt="..." />
+                            <div className="carousel-caption"></div>
+                            </div>
+                    );
+                })
+                return (
+                        <div className="carousel-inner" role="listbox">
+                        {li_items}
+                        </div>
+                )
+            }
+        });
+
+        var ArticlePicLi = React.createClass({
+            render: function() {
+                var pic_list = this.props.pic_list;
+                var post_id = this.props.post_id;
+                var li_items = this.props.pic_list.map(function(item, index) {
+                    var active=""
+                    if(index == 0){
+                        active="active"
+                    }
+                    var post_pic_id = "#post_pic_"+post_id;
+
+                    return (
+                        <li key={index} data-target={post_pic_id} data-slide-to={index} className={active} ></li>
+                    );
+                })
+                return (
+                        <ol className="carousel-indicators">
+                            {li_items}
+                        </ol>
+                )
+            }
+        });
+
+        var ArticleHeader = React.createClass({
+            render: function() {
+                var article = this.props.data;
+                var url = article.post_seo ? "http://{{ config['HOST'] }}/post/"+article.post_seo : "http://{{ config['HOST'] }}/id/"+article.post_id;
+                return (
+                        <header className="article-title" >
+                            <h2>
+                                <a href={url} ><span className="glyphicon glyphicon-picture" aria-hidden="true"></span>{article.post_title}</a>
+                            </h2>
+                        </header>
+                );
+            }
+        });
+
+
+        ReactDOM.render(
+                <Test source="http://{{ config['HOST'] }}/posts/page/" />,
+                document.getElementById('article-list')
+        );
+    </script>
+
+
     <!--多说js加载开始，一个页面只需要加载一次 -->
     <script type="text/javascript">
         var duoshuoQuery = {short_name: "{{ config['DUOSHUO_DOMAIN'] }}"};
@@ -261,6 +265,21 @@
             ds.charset = 'UTF-8';
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
         })();
+        $({property: 0}).animate({property: 100}, {
+            duration: 2000,
+            step: function () {
+                var percentage = Math.round(this.property);
+
+                $('#progress').css('width', percentage + "%");
+
+                if (percentage == 100) {
+                    $("#progress").addClass("done");//完成，隐藏进度条
+                }
+            }
+        });
+        $('img').error(function(){
+            $(this).src("{{ url_for('static', filename='img/loading.gif') }}");
+        })
     </script>
     <!--多说js加载结束，一个页面只需要加载一次 -->
 {% endblock scripts %}
