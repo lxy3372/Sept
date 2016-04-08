@@ -5,6 +5,7 @@ from functools import wraps
 from flask import redirect, session, current_app, flash, url_for, request, render_template
 from math import ceil
 from application.model.db import db
+from flask import current_app
 
 __author__ = 'Riky'
 
@@ -147,9 +148,9 @@ class InvalidUsage(Exception):
         if status_code is not None:
             self.status_code = status_code
         self.payload = payload
+        current_app.logger.error(self.payload)
         if exception is not None and isinstance(exception, Exception):
-            # TODO log
-            pass
+            current_app.logger.error(exception.message)
 
     def to_dict(self):
         rv = dict(self.payload or ())
@@ -166,9 +167,9 @@ class InvalidUsagePage(Exception):
         self.payload = payload
         self.data = data
         self.message = message if message is not None else ""
+        current_app.logger.error(self.message)
         if exception is not None and isinstance(exception, Exception):
-            # TODO log
-            pass
+            current_app.logger.error(exception.message)
 
     def to_dict(self):
         rv = dict(self.payload or ())

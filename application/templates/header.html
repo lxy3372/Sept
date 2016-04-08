@@ -1,11 +1,11 @@
 <header class="header content-box">
     <div class="header-title">
         <h1 class="logo">
-            <a href="{{ url_for('main.index') }}">title</a>
+            <a href="{{ url_for('main.index') }}">{{ config['APP_WEB_TITLE'] }}</a>
         </h1>
 
         <h2 class="subtitle">
-            <small>Secondary text</small>
+            <small>{{ config['APP_WEB_SUBTITLE'] }}</small>
         </h2>
     </div>
 </header>

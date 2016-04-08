@@ -5,6 +5,8 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     {%- block metas %}
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Keywords" content="{{ config['APP_KEYWORDS'] }}">
+        <meta name="description" content="{{ config['APP_DESCRIPTION'] }}">
     {%- endblock metas %}
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">

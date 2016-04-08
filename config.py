@@ -2,6 +2,7 @@
 # -*- coding=utf-8 -*-
 
 import os
+import logging
 
 
 class Config:
@@ -9,6 +10,9 @@ class Config:
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
     SESSION_KEY = 'users'
     PAGE_LIMIT = 10
+    LOGGING_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)%s'
+    LOGGING_LOCATION = './flask.log'
+    LOGGING_LEVEL = logging.INFO
 
     @staticmethod
     def init_app(app):

@@ -10,6 +10,7 @@ from config import config
 from application.model.db import db
 from flask.ext.markdown import Markdown
 from datetime import datetime
+import logging
 
 __author__ = 'Riky'
 
@@ -24,6 +25,12 @@ def create_app(config_name):
     app.register_blueprint(admin_blueprint)
     db.init_app(app)
     app.jinja_env.globals['url_for_other_page'] = url_for_other_page
+
+    hander = logging.FileHandler(app.config['LOGGING_LOCATION'])
+    hander.setLevel(app.config['LOGGING_LEVEL'])
+    formatter = logging.Formatter(app.config['LOGGING_FORMAT'])
+    hander.setFormatter(formatter)
+    app.logger.addHandler(hander)
 
     Bootstrap(app)
     Markdown(app)
@@ -71,4 +78,5 @@ def teardown_request(exception):
 
 @app.errorhandler(404)
 def page_not_found(e):
+    app.logger.info('page not found: %s', (request.path))
     return render_template('404.html'), 404
