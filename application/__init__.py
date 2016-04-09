@@ -8,7 +8,6 @@ from main import main as main_blueprint
 from admin import admin as admin_blueprint
 from config import config
 from application.model.db import db
-from flask.ext.markdown import Markdown
 from datetime import datetime
 import logging
 
@@ -33,7 +32,6 @@ def create_app(config_name):
     app.logger.addHandler(hander)
 
     Bootstrap(app)
-    Markdown(app)
 
     return app
 
