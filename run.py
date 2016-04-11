@@ -5,6 +5,7 @@ from application import create_app
 
 __author__ = 'Riky'
 
-app = create_app('dev')
+application = create_app('dev')
 
-app.run()
+if __name__ == '__main__':
+    application.run()
