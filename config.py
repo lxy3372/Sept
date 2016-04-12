@@ -31,7 +31,9 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    pass
+    @staticmethod
+    def init_app(app):
+        app.config.from_pyfile('./configs/idc.cfg')
 
 
 config = {
