@@ -99,7 +99,6 @@ def get_posts(page):
     post_type = int(param.get('post_type')) if len(param.get('post_type', '')) > 0 else None
     is_active = int(param.get('is_active')) if len(param.get('is_active', '')) > 0 else None
     post_title = param.get('title') if param.get('title', None) else None
-    print title
     try:
         list_obj, total = PostService.get_posts_list(limit, page, post_type=post_type, is_active=is_active,
                                                      title=post_title)

@@ -5,7 +5,7 @@ from application import create_app
 
 __author__ = 'Riky'
 
-application = create_app('dev')
+application = create_app('idc')
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0')
