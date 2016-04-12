@@ -172,6 +172,8 @@ class PostService(object):
         for post in posts_list:
             post_dict = {}
             post_dict['posts'] = post.to_dict()
+            post_dict['posts']['create_time'] = post_dict['posts']['create_time'].strftime('%Y年%m月%d日')
+            post_dict['posts']['update_time'] = post_dict['posts']['update_time'].strftime('%Y年%m月%d日')
             tags_list = PostService.get_tags_in_id(map(int, post.post_tag_id_str.split(',')))
             post_dict['tags_list'] = []
             if tags_list is not None:

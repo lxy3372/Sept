@@ -16,6 +16,8 @@
     <script src="{{ url_for('static', filename='js/react/browser.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
+    {{ moment.include_moment() }}
+    {{ moment.lang('zh-CN') }}
 {% endblock %}
 {% block body_attribs %} class="body" {% endblock body_attribs %}
 {% block navbar %}
@@ -80,9 +82,9 @@
                             <div class="article-footer">
                                 <div class="tags">
                                     <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                                    <a class="tag">#标签</a>
-                                    <a class="tag">#PHP</a>
-                                    <a class="tag">#PHP</a>
+                                    {% for tag in data['tag_obj_list'] %}
+                                        <a class="tag">#{{ tag['tag_name'] }}</a>
+                                    {% endfor %}
                                 </div>
                                 <div class="tags">
                                     <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
@@ -94,7 +96,7 @@
                                 <a class="tag">30</a>
                             </div>#}
                                 <div class="posted-time">
-                                    <span class="">2016-03-29</span>
+                                    <span class="">{{ moment(data['posts'].create_time).format('ll') }}</span>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>

@@ -4,6 +4,7 @@
 
 from flask import Flask, request, url_for, session, render_template
 from flask_bootstrap import Bootstrap
+from flask_moment import Moment
 from main import main as main_blueprint
 from admin import admin as admin_blueprint
 from config import config
@@ -32,6 +33,7 @@ def create_app(config_name):
     app.logger.addHandler(hander)
 
     Bootstrap(app)
+    moment = Moment(app)
 
     return app
 
